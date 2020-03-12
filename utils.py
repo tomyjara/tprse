@@ -7,6 +7,8 @@ from constantes import S, I, R
 
 def obtenerPorcentajeDeNodosEnEstado(estado, grafo):
     nodos_totales = len(grafo)
+    if nodos_totales == 0:
+        raise Exception("La cantidad de nodos debe ser mayor a cero")
     nodos_en_estado_estado = 0
     for nodo in grafo:
         if grafo.nodes[nodo]['estado'] == estado:
