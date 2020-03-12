@@ -1,4 +1,4 @@
-from simulador_de_epidemias.modelos import crearModelo, correrModeloSIS
+from modelos import crearModelo, correrModeloSIS
 
 CANTIDAD_DE_NODOS = 50
 PROBABILIDAD_DE_ESTAR_INFECTADO = 0.4

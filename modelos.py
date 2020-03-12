@@ -1,8 +1,8 @@
 import random
 import sys
 
-from simulador_de_epidemias.constantes import S, I, R
-from simulador_de_epidemias.utils import calcularProbabilidadDeContagio, seContagiaDada, colorEstado, \
+from constantes import S, I, R
+from utils import calcularProbabilidadDeContagio, seContagiaDada, colorEstado, \
     mostrarEstadoInicial, mostrarEstadoFinal, \
     generarGrafoDadoUnTipo
 
