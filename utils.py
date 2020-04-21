@@ -66,11 +66,15 @@ def generarGrafoDadoUnTipo(tipoDeGrafo, cantidadDeNodos):
     if tipoDeGrafo == "scale":
         grafo = nx.scale_free_graph(cantidadDeNodos)
     elif tipoDeGrafo == "2d_grid":
-        grafo = nx.grid_2d_graph(cantidadDeNodos, cantidadDeNodos)
+        grafo = nx.nx.grid_graph(dim=[cantidadDeNodos, cantidadDeNodos])
     elif tipoDeGrafo == "small_world":
         grafo = nx.watts_strogatz_graph(cantidadDeNodos)
     elif tipoDeGrafo == "random":
         grafo = nx.random(cantidadDeNodos)
+    elif tipoDeGrafo == "balanced_tree":
+        d = 1  # Grado de salida de los nodos
+        lamb = 1  # Distancia máxima entre par de nodos
+        nx.balanced_tree(d, lamb)
     else:
         raise Exception("Tipo de grafo invalido")
 
