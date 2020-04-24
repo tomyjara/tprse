@@ -1,12 +1,16 @@
-from modelos import crearModelo, correrModeloSIS
+from modelos import correrModeloSIRM, crearModelo2
+import sys
 
-CANTIDAD_DE_NODOS = 50
-PROBABILIDAD_DE_ESTAR_INFECTADO = 0.4
-CANTIDAD_DE_ITERACIONES = 10
-TI = 7
-RI = 0
+tipo_de_grafo = sys.argv[1]
+cantidad_de_nodos = int(sys.argv[2])
+probabilidad_de_estar_infectado = float(sys.argv[3])
+tiempo_de_infeccion = int(sys.argv[4])
+tiempo_de_incubacion = int(sys.argv[5])
+cantidad_de_iteraciones = int(sys.argv[6])
 
-modelo = crearModelo(tipoDeGrafo="2d_grid", cantidadDeNodos=CANTIDAD_DE_NODOS,
-                     probabilidadDeEstarInfectado=PROBABILIDAD_DE_ESTAR_INFECTADO, ti=TI, ri=RI)
 
-correrModeloSIS(modelo, 500)
+modelo = crearModelo2(tipo_de_grafo=tipo_de_grafo, cantidad_de_nodos=cantidad_de_nodos,
+                      probabilidad_de_estar_infectado=probabilidad_de_estar_infectado, tiempo_infeccion=tiempo_de_infeccion, ri=0,
+                      tiempo_incubacion=tiempo_de_incubacion)
+
+correrModeloSIRM(modelo, cantidad_de_iteraciones)
