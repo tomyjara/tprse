@@ -2,7 +2,7 @@ import random
 
 import networkx as nx
 
-from constantes import S, I, R
+from constantes import S, I, R, M
 
 
 def obtenerPorcentajeDeNodosEnEstado(estado, grafo):
@@ -11,21 +11,26 @@ def obtenerPorcentajeDeNodosEnEstado(estado, grafo):
         raise Exception("La cantidad de nodos debe ser mayor a cero")
     nodos_en_estado_estado = 0
     for nodo in grafo:
-        if grafo.nodes[nodo]['estado'] == estado:
+        estadoNodo = type(grafo.nodes[nodo]['estado']).__name__
+        if estadoNodo == estado:
             nodos_en_estado_estado += 1
     return nodos_en_estado_estado * 100 / nodos_totales
 
 
 def obtenerPorcentajeDeInfectados(grafo):
-    return obtenerPorcentajeDeNodosEnEstado(I, grafo)
+    return obtenerPorcentajeDeNodosEnEstado('EstadoInfectado', grafo)
 
 
 def obtenerPorcentajeDeSusceptibles(grafo):
-    return obtenerPorcentajeDeNodosEnEstado(S, grafo)
+    return obtenerPorcentajeDeNodosEnEstado('EstadoSusceptible', grafo)
 
 
 def obtenerPorcentajeDeRecuperados(grafo):
-    return obtenerPorcentajeDeNodosEnEstado(R, grafo)
+    return obtenerPorcentajeDeNodosEnEstado('EstadoRecuperado', grafo)
+
+
+def obtenerPorcentajeDeMuertos(grafo):
+    return obtenerPorcentajeDeNodosEnEstado('EstadoMuerto', grafo)
 
 
 def mostrarGrafo(G):
@@ -37,12 +42,19 @@ def seContagiaDada(una_probabilidad):
     return random.random() < una_probabilidad
 
 
+def muereDada(una_probabilidad, t_incubacion):
+    if not t_incubacion > 0:
+        return random.random() < una_probabilidad
+    else:
+        return False
+
+
 def calcularProbabilidadDeContagio(grafo, nodo):
     if len(list(grafo.neighbors(nodo))) == 0:
         return 0
     else:
-        return len([vecino for vecino in grafo.neighbors(nodo) if grafo.nodes[vecino]['estado'] == I]) / len(
-            list(grafo.neighbors(nodo)))
+        return (len([vecino for vecino in grafo.neighbors(nodo) if grafo.nodes[vecino]['estado'] == I]) / len(
+            list(grafo.neighbors(nodo))))
 
 
 def mostrarEstadoInicial(modelo, cantidadDeIteraciones):
@@ -52,7 +64,19 @@ def mostrarEstadoInicial(modelo, cantidadDeIteraciones):
     print(' - Cantidad de iteraciones: ', cantidadDeIteraciones)
     print(' - Porcentaje de nodos infectados: ', obtenerPorcentajeDeInfectados(modelo))
     print(' - Porcentaje de nodos susceptibles: ', obtenerPorcentajeDeSusceptibles(modelo))
-    print(' - Porcentaje de nodos recuperados: ', obtenerPorcentajeDeRecuperados(modelo), "\n")
+    print(' - Porcentaje de nodos recuperados: ', obtenerPorcentajeDeRecuperados(modelo))
+    print(' - Porcentaje de nodos muertos: ', obtenerPorcentajeDeMuertos(modelo), "\n")
+
+
+def mostrarEstadoInicial2(modelo, cantidadDeIteraciones):
+    print("\n", "CONFIGURACION INICIAL:")
+    print(' - Nodos totales: ', len(modelo))
+    print(' - Tipo de grafo: ', modelo.graph['tipo'])
+    print(' - Cantidad de iteraciones: ', cantidadDeIteraciones)
+    print(' - Porcentaje de nodos infectados: ', obtenerPorcentajeDeInfectados(modelo))
+    print(' - Porcentaje de nodos susceptibles: ', obtenerPorcentajeDeSusceptibles(modelo))
+    print(' - Porcentaje de nodos recuperados: ', obtenerPorcentajeDeRecuperados(modelo))
+    print(' - Porcentaje de nodos muertos: ', obtenerPorcentajeDeMuertos(modelo), "\n")
 
 
 def mostrarEstadoFinal(modelo):
@@ -60,6 +84,17 @@ def mostrarEstadoFinal(modelo):
     print(' - Porcentaje de nodos infectados: ', obtenerPorcentajeDeInfectados(modelo))
     print(' - Porcentaje de nodos susceptibles: ', obtenerPorcentajeDeSusceptibles(modelo))
     print(' - Porcentaje de nodos recuperados: ', obtenerPorcentajeDeRecuperados(modelo))
+    print(' - Porcentaje de nodos muertos: ', obtenerPorcentajeDeMuertos(modelo), "\n")
+
+
+def obtenerEstado(modelo):
+    return obtenerPorcentajeDeInfectados(modelo),\
+           obtenerPorcentajeDeSusceptibles(modelo),\
+           obtenerPorcentajeDeRecuperados(modelo),\
+           obtenerPorcentajeDeMuertos(modelo)
+
+
+'''Falta generar bien el random y el small world'''
 
 
 def generarGrafoDadoUnTipo(tipoDeGrafo, cantidadDeNodos):
@@ -75,6 +110,7 @@ def generarGrafoDadoUnTipo(tipoDeGrafo, cantidadDeNodos):
         d = 1  # Grado de salida de los nodos
         lamb = 1  # Distancia máxima entre par de nodos
         nx.balanced_tree(d, lamb)
+        grafo = nx.gnm_random_graph(cantidadDeNodos, int(cantidadDeNodos / 2))
     else:
         raise Exception("Tipo de grafo invalido")
 

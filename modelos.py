@@ -1,10 +1,12 @@
 import random
 import sys
 
-from constantes import S, I, R
+from constantes import S, I, R, PROBABILIDAD_DE_DECESO, M, T_INCUBACION, T_INFECCION
+from estados.estado_infectado import EstadoInfectado
+from estados.estado_susceptible import EstadoSusceptible
 from utils import calcularProbabilidadDeContagio, seContagiaDada, colorEstado, \
     mostrarEstadoInicial, mostrarEstadoFinal, \
-    generarGrafoDadoUnTipo
+    generarGrafoDadoUnTipo, muereDada, obtenerEstado
 
 
 def iterar_SIS(G, ti):
@@ -13,10 +15,10 @@ def iterar_SIS(G, ti):
             probabilidad_de_contagio = calcularProbabilidadDeContagio(G, n)
             if seContagiaDada(probabilidad_de_contagio):
                 G.nodes[n]['estado'] = I
-                G.nodes[n]['Ti'] = ti
+                G.nodes[n]['ti'] = ti
         else:
-            G.nodes[n]['Ti'] -= 1
-            if G.nodes[n]['Ti'] == 0:
+            G.nodes[n]['ti'] -= 1
+            if G.nodes[n]['ti'] == 0:
                 G.nodes[n]['estado'] = S
     # mostrarGrafo(G)
     return G
@@ -28,15 +30,48 @@ def iterar_SIR(G, ti):
             probabilidad_de_contagio = calcularProbabilidadDeContagio(G, n)
             if seContagiaDada(probabilidad_de_contagio):
                 G.nodes[n]['estado'] = I
-                G.nodes[n]['Ti'] = ti
+                G.nodes[n]['ti'] = ti
         else:
             if G.nodes[n]['estado'] == I:
-                G.nodes[n]['Ti'] -= 1
-                if G.nodes[n]['Ti'] == 0:
+                G.nodes[n]['ti'] -= 1
+                if G.nodes[n]['ti'] == 0:
                     G.nodes[n]['estado'] = R
             else:
                 pass
     # mostrarGrafo(G)
+    return G
+
+
+def iterar_SIRM(G, t_infeccion):
+    for n in G:
+        if G.nodes[n]['estado'] == S:
+            probabilidad_de_contagio = calcularProbabilidadDeContagio(G, n)
+            if seContagiaDada(probabilidad_de_contagio):
+                G.nodes[n]['estado'] = I
+                G.nodes[n]['ti'] = t_infeccion
+                G.nodes[n]['t_inc'] = G.graph['t_inc']
+        else:
+
+            if G.nodes[n]['estado'] == I:
+                G.nodes[n]['ti'] -= 1
+                G.nodes[n]['t_inc'] -= 1
+                probabilidad_de_morir = G.graph['prob_de_deceso']
+
+                if muereDada(probabilidad_de_morir, G.nodes[n]['t_inc']):
+                    G.nodes[n]['estado'] = M
+                if G.nodes[n]['ti'] == 0:
+                    G.nodes[n]['estado'] = R
+
+            else:
+                pass
+        # mostrarGrafo(G)
+    return G
+
+
+def iterar_SIRM2(G):
+    for n in G:
+        G.nodes[n]['estado'] = G.nodes[n]['estado'].transicionar(n, G)
+
     return G
 
 
@@ -46,34 +81,57 @@ def iterar_SIRS(G, ti, ri):
             probabilidad_de_contagio = calcularProbabilidadDeContagio(G, n)
             if seContagiaDada(probabilidad_de_contagio):
                 G.nodes[n]['estado'] = I
-                G.nodes[n]['Ti'] = ti
+                G.nodes[n]['ti'] = ti
 
         elif G.nodes[n]['estado'] == I:
-            G.nodes[n]['Ti'] -= 1
-            if G.nodes[n]['Ti'] == 0:
+            G.nodes[n]['ti'] -= 1
+            if G.nodes[n]['ti'] == 0:
                 G.nodes[n]['estado'] = R
-                G.nodes[n]['Ri'] = ri
+                G.nodes[n]['ri'] = ri
         else:
-            G.nodes[n]['Ri'] -= 1
-            if G.nodes[n]['Ri'] == 0:
+            G.nodes[n]['ri'] -= 1
+            if G.nodes[n]['ri'] == 0:
                 G.nodes[n]['estado'] = S
     # mostrarGrafo(G)
 
     return G
 
 
-def crearModelo(tipoDeGrafo, cantidadDeNodos, probabilidadDeEstarInfectado, ti=0, ri=0):
+def crearModelo(tipoDeGrafo, cantidadDeNodos, probabilidadDeEstarInfectado, ti=0, ri=0,
+                probabilidadDeDeceso=PROBABILIDAD_DE_DECESO, tiempoDeIncubacion=T_INCUBACION):
     grafo = generarGrafoDadoUnTipo(tipoDeGrafo, cantidadDeNodos)
 
     for n in grafo.nodes:
         grafo.nodes[n]['estado'] = I if random.random() < probabilidadDeEstarInfectado else S
-        grafo.nodes[n]['Ti'] = ti if grafo.nodes[n]['estado'] == I else 0
-        grafo.nodes[n]['Ri'] = ri
+        grafo.nodes[n]['ti'] = ti if grafo.nodes[n]['estado'] == I else 0
+        grafo.nodes[n]['t_inc'] = tiempoDeIncubacion if grafo.nodes[n]['estado'] == I else 0
+        grafo.nodes[n]['ri'] = ri
+        grafo.nodes[n]['esta_vivo'] = True
 
     grafo.graph['colores'] = [colorEstado(grafo.nodes[n]['estado']) for n in grafo.nodes]
     grafo.graph['ti'] = ti
     grafo.graph['ri'] = ri
     grafo.graph['tipo'] = tipoDeGrafo
+    grafo.graph['t_inc'] = tiempoDeIncubacion
+    grafo.graph['prob_de_deceso'] = probabilidadDeDeceso
+
+    return grafo
+
+
+def crearModelo2(tipo_de_grafo, cantidad_de_nodos, probabilidad_de_estar_infectado, tiempo_infeccion=0, ri=0,
+                 probabilidad_deceso=PROBABILIDAD_DE_DECESO, tiempo_incubacion=T_INCUBACION):
+    grafo = generarGrafoDadoUnTipo(tipo_de_grafo, cantidad_de_nodos)
+
+    for n in grafo.nodes:
+        grafo.nodes[n]['estado'] = EstadoInfectado(tiempo_infeccion,
+                                                   tiempo_incubacion) if random.random() < probabilidad_de_estar_infectado else EstadoSusceptible()
+
+    grafo.graph['colores'] = [colorEstado(grafo.nodes[n]['estado']) for n in grafo.nodes]
+    grafo.graph['tiempo_infeccion'] = tiempo_infeccion
+    grafo.graph['ri'] = ri
+    grafo.graph['tipo'] = tipo_de_grafo
+    grafo.graph['tiempo_incubacion'] = tiempo_incubacion
+    grafo.graph['prob_de_deceso'] = probabilidad_deceso
 
     return grafo
 
@@ -103,6 +161,27 @@ def correrModeloSIR(modelo, cantidadDeIteraciones):
         sys.stdout.flush()
 
     sys.stdout.write("\x1b[0m")
+    mostrarEstadoFinal(modelo)
+
+
+def correrModeloSIRM(modelo, cantidadDeIteraciones):
+    resultados = open('resultados', 'w')
+    print("\n", "Corriendo modelo SIRM")
+    mostrarEstadoInicial(modelo, cantidadDeIteraciones)
+
+    for i in range(1, cantidadDeIteraciones + 1):
+        iterar_SIRM2(modelo)
+        infectados, susceptibles, recuperados, muertos = obtenerEstado(modelo)
+        resultados.write(str(infectados)+','+str(susceptibles)+','+str(recuperados)+','+str(muertos))
+        if i < cantidadDeIteraciones:
+            resultados.write(',')
+
+        sys.stdout.write("\r \x1b[1;32m Progreso %d%%" % (int(i * 100 / cantidadDeIteraciones)))
+        sys.stdout.flush()
+
+    sys.stdout.write("\x1b[0m")
+
+    resultados.close()
     mostrarEstadoFinal(modelo)
 
 
