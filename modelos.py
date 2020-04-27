@@ -1,12 +1,16 @@
 import random
 import sys
 
-from constantes import S, I, R, PROBABILIDAD_DE_DECESO, M, T_INCUBACION, T_INFECCION
-from estados.estado_infectado import EstadoInfectado
+from constantes import S, I, R, PROBABILIDAD_DE_DECESO, M, T_INCUBACION, T_INFECCION_MILD, T_INFECCION_GRAVE, \
+    PROBABILIDAD_DE_DECESO_R
+
+from estados.estado_incubando import EstadoIncubando
 from estados.estado_susceptible import EstadoSusceptible
+
+from simulador import poblacion_de_riesgo
 from utils import calcularProbabilidadDeContagio, seContagiaDada, colorEstado, \
     mostrarEstadoInicial, mostrarEstadoFinal, \
-    generarGrafoDadoUnTipo, muereDada, obtenerEstado
+    generarGrafoDadoUnTipo, muereDada, obtenerEstadoBien
 
 
 def iterar_SIS(G, ti):
@@ -71,7 +75,6 @@ def iterar_SIRM(G, t_infeccion):
 def iterar_SIRM2(G):
     for n in G:
         G.nodes[n]['estado'] = G.nodes[n]['estado'].transicionar(n, G)
-
     return G
 
 
@@ -118,20 +121,25 @@ def crearModelo(tipoDeGrafo, cantidadDeNodos, probabilidadDeEstarInfectado, ti=0
     return grafo
 
 
-def crearModelo2(tipo_de_grafo, cantidad_de_nodos, probabilidad_de_estar_infectado, tiempo_infeccion=0, ri=0,
-                 probabilidad_deceso=PROBABILIDAD_DE_DECESO, tiempo_incubacion=T_INCUBACION):
+def crearModelo2(tipo_de_grafo, cantidad_de_nodos, probabilidad_de_estar_infectado,
+                 tiempo_infeccion_mild=T_INFECCION_MILD, tiempo_infecc_g=T_INFECCION_GRAVE, ri=0,
+                 probabilidad_deceso=PROBABILIDAD_DE_DECESO, probabilidad_deceso_riesgo=PROBABILIDAD_DE_DECESO_R,
+                 tiempo_incubacion=T_INCUBACION, probabilidad_p_riesgo=poblacion_de_riesgo):
     grafo = generarGrafoDadoUnTipo(tipo_de_grafo, cantidad_de_nodos)
 
     for n in grafo.nodes:
-        grafo.nodes[n]['estado'] = EstadoInfectado(tiempo_infeccion,
-                                                   tiempo_incubacion) if random.random() < probabilidad_de_estar_infectado else EstadoSusceptible()
+        grafo.nodes[n]['riesgo'] = random.random() < probabilidad_p_riesgo
+        grafo.nodes[n]['estado'] = EstadoIncubando(
+            tiempo_incubacion) if random.random() < probabilidad_de_estar_infectado else EstadoSusceptible()
 
     grafo.graph['colores'] = [colorEstado(grafo.nodes[n]['estado']) for n in grafo.nodes]
-    grafo.graph['tiempo_infeccion'] = tiempo_infeccion
+    grafo.graph['tiempo_incubacion'] = tiempo_incubacion
+    grafo.graph['tiempo_infeccion_mild'] = tiempo_infeccion_mild
+    grafo.graph['tiempo_infeccion_grave'] = tiempo_infecc_g
     grafo.graph['ri'] = ri
     grafo.graph['tipo'] = tipo_de_grafo
-    grafo.graph['tiempo_incubacion'] = tiempo_incubacion
     grafo.graph['prob_de_deceso'] = probabilidad_deceso
+    grafo.graph['prob_de_deceso_riesgo'] = probabilidad_deceso_riesgo
 
     return grafo
 
@@ -171,8 +179,8 @@ def correrModeloSIRM(modelo, cantidadDeIteraciones):
 
     for i in range(1, cantidadDeIteraciones + 1):
         iterar_SIRM2(modelo)
-        infectados, susceptibles, recuperados, muertos = obtenerEstado(modelo)
-        resultados.write(str(infectados)+','+str(susceptibles)+','+str(recuperados)+','+str(muertos))
+        # infectados, susceptibles, recuperados, muertos = obtenerEstadoBien(modelo)
+        # resultados.write(str(infectados) + ',' + str(susceptibles) + ',' + str(recuperados) + ',' + str(muertos))
         if i < cantidadDeIteraciones:
             resultados.write(',')
 

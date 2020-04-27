@@ -20,6 +20,14 @@ def obtenerPorcentajeDeNodosEnEstado(estado, grafo):
 def obtenerPorcentajeDeInfectados(grafo):
     return obtenerPorcentajeDeNodosEnEstado('EstadoInfectado', grafo)
 
+def obtenerPorcentajeDeInfectadosTotal(grafo):
+    return obtenerPorcentajeDeInfectadosGrave(grafo) + obtenerPorcentajeDeInfectadosMild(grafo)
+
+def obtenerPorcentajeDeInfectadosGrave(grafo):
+    return obtenerPorcentajeDeNodosEnEstado('EstadoInfectadoGrave', grafo) + obtenerPorcentajeDeNodosEnEstado('EstadoInfectadoGraveRiesgo', grafo)
+
+def obtenerPorcentajeDeInfectadosMild(grafo):
+    return obtenerPorcentajeDeNodosEnEstado('EstadoInfectadoMild', grafo)
 
 def obtenerPorcentajeDeSusceptibles(grafo):
     return obtenerPorcentajeDeNodosEnEstado('EstadoSusceptible', grafo)
@@ -87,11 +95,28 @@ def mostrarEstadoFinal(modelo):
     print(' - Porcentaje de nodos muertos: ', obtenerPorcentajeDeMuertos(modelo), "\n")
 
 
-def obtenerEstado(modelo):
-    return obtenerPorcentajeDeInfectados(modelo),\
-           obtenerPorcentajeDeSusceptibles(modelo),\
-           obtenerPorcentajeDeRecuperados(modelo),\
-           obtenerPorcentajeDeMuertos(modelo)
+# def obtenerEstado(modelo):
+#     return obtenerPorcentajeDeInfectados(modelo),\
+#            obtenerPorcentajeDeSusceptibles(modelo),\
+#            obtenerPorcentajeDeRecuperados(modelo),\
+#            obtenerPorcentajeDeMuertos(modelo)
+
+def obtenerEstadoBien(grafo):
+    nodos_totales = len(grafo)
+    cantidad_de_nodos_en_estado = {'EstadoSusceptible': 0, 'EstadoInfectado': 0, 'EstadoMuerto': 0,
+                                   'EstadoRecuperado': 0}
+
+    for nodo in grafo:
+        estadoNodo = type(grafo.nodes[nodo]['estado']).__name__
+        cantidad_de_nodos_en_estado[estadoNodo] += 1
+
+    for key in cantidad_de_nodos_en_estado:
+        cantidad_de_nodos_en_estado[key] = cantidad_de_nodos_en_estado[key] * 100 / nodos_totales
+
+    return cantidad_de_nodos_en_estado['EstadoInfectado'], \
+           cantidad_de_nodos_en_estado['EstadoSusceptible'], \
+           cantidad_de_nodos_en_estado['EstadoRecuperado'], \
+           cantidad_de_nodos_en_estado['EstadoMuerto']
 
 
 '''Falta generar bien el random y el small world'''

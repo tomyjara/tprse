@@ -1,7 +1,7 @@
 import unittest
 
 from constantes import GRID, S, I
-from modelos import crearModelo, correrModeloSIS, iterar_SIS, iterar_SIRS, iterar_SIR
+from modelos import crearModelo, iterar_SIS, iterar_SIRS, iterar_SIR
 
 
 class TestModelos(unittest.TestCase):
