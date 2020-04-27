@@ -1,0 +1,8 @@
+
+# IDEA
+out
+.idea
+!.idea/codeStyleSettings.xml
+*.iml
+*.iws
+.DS*
