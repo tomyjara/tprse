@@ -19,3 +19,17 @@ SMALL_WORLD = 'small_world'
 RANDOM = 'random'
 
 PROBABILIDAD_DE_DECESO = 0.034
+
+PROBABILIDAD_DE_DECESO_RIESGO = 0.034
+
+#TODO:Chequear los valores de los siguientes valores:
+
+TIEMPO_INF_MILD = 7
+
+T_INF_GRAVE = 7
+
+PROBABILIDAD_RIESGO = 0.5
+
+PROB_INFEC_GRAVE_RIESGO = 0.5
+
+PROB_INFEC_GRAVE = 0.5

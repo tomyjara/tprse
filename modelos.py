@@ -1,8 +1,9 @@
 import random
 import sys
 
-from constantes import S, I, R, PROBABILIDAD_DE_DECESO, M, T_INCUBACION, T_INFECCION
-from estados.estado_infectado import EstadoInfectado
+from constantes import S, I, R, PROBABILIDAD_DE_DECESO, M, T_INCUBACION, T_INFECCION, PROBABILIDAD_RIESGO, \
+    PROB_INFEC_GRAVE_RIESGO, PROB_INFEC_GRAVE, TIEMPO_INF_MILD, PROBABILIDAD_DE_DECESO_RIESGO, T_INF_GRAVE
+from estados.estado_incubando import EstadoIncubando
 from estados.estado_susceptible import EstadoSusceptible
 from utils import calcularProbabilidadDeContagio, seContagiaDada, colorEstado, \
     mostrarEstadoInicial, mostrarEstadoFinal, \
@@ -118,20 +119,28 @@ def crearModelo(tipoDeGrafo, cantidadDeNodos, probabilidadDeEstarInfectado, ti=0
     return grafo
 
 
-def crearModelo2(tipo_de_grafo, cantidad_de_nodos, probabilidad_de_estar_infectado, tiempo_infeccion=0, ri=0,
-                 probabilidad_deceso=PROBABILIDAD_DE_DECESO, tiempo_incubacion=T_INCUBACION):
+def crearModelo2(tipo_de_grafo, cantidad_de_nodos, probabilidad_de_estar_incubando, tiempo_inf_mild=TIEMPO_INF_MILD,
+                 ri=0, probabilidad_deceso=PROBABILIDAD_DE_DECESO, tiempo_incubacion=T_INCUBACION,
+                 probabilidad_riesgo=PROBABILIDAD_RIESGO, prob_infecc_grave_riesgo=PROB_INFEC_GRAVE_RIESGO,
+                 prob_infecc_grave=PROB_INFEC_GRAVE, prob_deceso_riesgo=PROBABILIDAD_DE_DECESO_RIESGO,
+                 tiempo_inf_grave=T_INF_GRAVE):
     grafo = generarGrafoDadoUnTipo(tipo_de_grafo, cantidad_de_nodos)
 
     for n in grafo.nodes:
-        grafo.nodes[n]['estado'] = EstadoInfectado(tiempo_infeccion,
-                                                   tiempo_incubacion) if random.random() < probabilidad_de_estar_infectado else EstadoSusceptible()
+        grafo.nodes[n]['estado'] = EstadoIncubando(
+            tiempo_incubacion) if random.random() < probabilidad_de_estar_incubando else EstadoSusceptible()
+        grafo.nodes[n]['riesgo'] = random.random() < probabilidad_riesgo
 
     grafo.graph['colores'] = [colorEstado(grafo.nodes[n]['estado']) for n in grafo.nodes]
-    grafo.graph['tiempo_infeccion'] = tiempo_infeccion
+    grafo.graph['tiempo_inf_mild'] = tiempo_inf_mild
+    grafo.graph['tiempo_inf_grave'] = tiempo_inf_grave
     grafo.graph['ri'] = ri
     grafo.graph['tipo'] = tipo_de_grafo
     grafo.graph['tiempo_incubacion'] = tiempo_incubacion
     grafo.graph['prob_de_deceso'] = probabilidad_deceso
+    grafo.graph['prob_de_deceso_riesgo'] = prob_deceso_riesgo
+    grafo.graph['prob_infec_grave_riesgo'] = prob_infecc_grave_riesgo
+    grafo.graph['prob_infec_grave'] = prob_infecc_grave
 
     return grafo
 
