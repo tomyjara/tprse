@@ -47,27 +47,27 @@ def main():
             cantidadDeNodos = int(input("Cantidad de nodos: "))
             seed = int(input("Seed: "))
             grafo = nx.random_regular_graph(gradoDeNodo, cantidadDeNodos, seed)
+            grafo.graph['tipo'] = "Random graph"
         elif num_grafo == '5':
             d = int(input("Grado de salida de los nodos: "))
             lamb = int(input("Distancia maxima entre nodos: "))
             grafo = nx.balanced_tree(d, lamb)
-            grafo.graph['tipo'] = "Balanced Graph"
+            grafo.graph['tipo'] = "Balanced Tree"
         else:
-            print("Invalid input.")
+            raise Exception("Tipo de grafo invalido")
 
         probabilidad_de_estar_incubando = float(input("Probabilidad de estar infectado: "))
         cantidad_de_iteraciones = int(input("Numero de iteraciones: "))
 
         if probabilidad_de_estar_incubando > 1 or probabilidad_de_estar_incubando < 0:
-            print("Invalid probability")
-            return
+            raise Exception("Probabilidad inválida")
 
         modelo = crearModelo2(unGrafo=grafo, probabilidad_de_estar_incubando=probabilidad_de_estar_incubando)
 
         correrModeloSIRM(modelo, cantidad_de_iteraciones)
 
     except ValueError:
-        print("No.. input is invalid.")
+        raise Exception("Input numerico invalido")
 
 
 if __name__ == "__main__":
