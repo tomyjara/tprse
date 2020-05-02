@@ -119,30 +119,28 @@ def crearModelo(tipoDeGrafo, cantidadDeNodos, probabilidadDeEstarInfectado, ti=0
     return grafo
 
 
-def crearModelo2(tipo_de_grafo, cantidad_de_nodos, probabilidad_de_estar_incubando, tiempo_inf_mild=TIEMPO_INF_MILD,
-                 ri=0, probabilidad_deceso=PROBABILIDAD_DE_DECESO, tiempo_incubacion=T_INCUBACION,
-                 probabilidad_riesgo=PROBABILIDAD_RIESGO, prob_infecc_grave_riesgo=PROB_INFEC_GRAVE_RIESGO,
-                 prob_infecc_grave=PROB_INFEC_GRAVE, prob_deceso_riesgo=PROBABILIDAD_DE_DECESO_RIESGO,
-                 tiempo_inf_grave=T_INF_GRAVE):
-    grafo = generarGrafoDadoUnTipo(tipo_de_grafo, cantidad_de_nodos)
+def crearModelo2(unGrafo, ri=0, tiempo_incubacion=T_INCUBACION, tiempo_inf_mild=TIEMPO_INF_MILD,
+                 tiempo_inf_grave=T_INF_GRAVE, probabilidad_de_estar_incubando=0,
+                 probabilidad_deceso=PROBABILIDAD_DE_DECESO, probabilidad_riesgo=PROBABILIDAD_RIESGO,
+                 prob_infecc_grave_riesgo=PROB_INFEC_GRAVE_RIESGO, prob_infecc_grave=PROB_INFEC_GRAVE,
+                 prob_deceso_riesgo=PROBABILIDAD_DE_DECESO_RIESGO):
 
-    for n in grafo.nodes:
-        grafo.nodes[n]['estado'] = EstadoIncubando(
+    for n in unGrafo.nodes:
+        unGrafo.nodes[n]['estado'] = EstadoIncubando(
             tiempo_incubacion) if random.random() < probabilidad_de_estar_incubando else EstadoSusceptible()
-        grafo.nodes[n]['riesgo'] = random.random() < probabilidad_riesgo
+        unGrafo.nodes[n]['riesgo'] = random.random() < probabilidad_riesgo
 
-    grafo.graph['colores'] = [colorEstado(grafo.nodes[n]['estado']) for n in grafo.nodes]
-    grafo.graph['tiempo_inf_mild'] = tiempo_inf_mild
-    grafo.graph['tiempo_inf_grave'] = tiempo_inf_grave
-    grafo.graph['ri'] = ri
-    grafo.graph['tipo'] = tipo_de_grafo
-    grafo.graph['tiempo_incubacion'] = tiempo_incubacion
-    grafo.graph['prob_de_deceso'] = probabilidad_deceso
-    grafo.graph['prob_de_deceso_riesgo'] = prob_deceso_riesgo
-    grafo.graph['prob_infec_grave_riesgo'] = prob_infecc_grave_riesgo
-    grafo.graph['prob_infec_grave'] = prob_infecc_grave
+    unGrafo.graph['colores'] = [colorEstado(unGrafo.nodes[n]['estado']) for n in unGrafo.nodes]
+    unGrafo.graph['tiempo_inf_mild'] = tiempo_inf_mild
+    unGrafo.graph['tiempo_inf_grave'] = tiempo_inf_grave
+    unGrafo.graph['ri'] = ri
+    unGrafo.graph['tiempo_incubacion'] = tiempo_incubacion
+    unGrafo.graph['prob_de_deceso'] = probabilidad_deceso
+    unGrafo.graph['prob_de_deceso_riesgo'] = prob_deceso_riesgo
+    unGrafo.graph['prob_infec_grave_riesgo'] = prob_infecc_grave_riesgo
+    unGrafo.graph['prob_infec_grave'] = prob_infecc_grave
 
-    return grafo
+    return unGrafo
 
 
 def correrModeloSIS(modelo, cantidadDeIteraciones):
