@@ -11,7 +11,8 @@ class EstadoInfectado(EstadoNodo):
         self.tiempo_infeccion = tiempo_infeccion
         self.tiempo_incubacion = tiempo_incubacion
 
-    def muereDada(self, una_probabilidad, t_incubacion):
+    @staticmethod
+    def muereDada(una_probabilidad, t_incubacion):
         if not t_incubacion > 0:
             return random.random() < una_probabilidad
         else:
