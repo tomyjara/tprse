@@ -1,6 +1,6 @@
 import random
 
-from estados.estado_infectado import EstadoInfectado
+from estados.estado_incubando import EstadoIncubando
 from estados.estado_nodo import EstadoNodo
 
 
@@ -14,6 +14,6 @@ class EstadoSusceptible(EstadoNodo):
 
         estado_actual = self
         if self.seContagiaDada(probabilidad_de_contagio):
-            estado_actual = EstadoInfectado(tiempo_infeccion=grafo.graph['tiempo_infeccion'], tiempo_incubacion=grafo.graph['tiempo_incubacion'])
+            estado_actual = EstadoIncubando(tiempo_incubacion=grafo.graph['tiempo_incubacion'])
 
         return estado_actual
