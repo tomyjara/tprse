@@ -1,12 +1,6 @@
 import networkx as nx
 
-from modelos import correrModeloSIRM, crearModelo2
-import sys
-
-
-# tipo_de_grafo = sys.argv[1]# cantidad_de_nodos = int(sys.argv[2])
-# probabilidad_de_estar_incubando = float(sys.argv[3])
-# cantidad_de_iteraciones = int(sys.argv[6])
+from modelos import correr_modelo_SIRM, crear_modelo_SIRM
 
 
 def main():
@@ -62,9 +56,9 @@ def main():
         if probabilidad_de_estar_incubando > 1 or probabilidad_de_estar_incubando < 0:
             raise Exception("Probabilidad inválida")
 
-        modelo = crearModelo2(unGrafo=grafo, probabilidad_de_estar_incubando=probabilidad_de_estar_incubando)
+        modelo = crear_modelo_SIRM(unGrafo=grafo, probabilidad_de_estar_incubando=probabilidad_de_estar_incubando)
 
-        correrModeloSIRM(modelo, cantidad_de_iteraciones)
+        correr_modelo_SIRM(modelo, cantidad_de_iteraciones)
 
     except ValueError:
         raise Exception("Input numerico invalido")

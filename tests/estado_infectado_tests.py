@@ -1,13 +1,13 @@
 import unittest
 
-from constantes import GRID, SCALE_FREE
+from constantes import SCALE_FREE
 from estados.estado_infectado import EstadoInfectado
-from modelos import crearModelo2
+from modelos import crear_modelo_SIRM
 
 
 class TestEstadoInfectado(unittest.TestCase):
-    grafo = crearModelo2(SCALE_FREE, 10, 0.5, tiempo_infeccion=14, ri=0,
-                         probabilidad_deceso=0.034, tiempo_incubacion=7)
+    grafo = crear_modelo_SIRM(SCALE_FREE, 10, 0.5, tiempo_infeccion=14,
+                              probabilidad_deceso=0.034, tiempo_incubacion=7)
 
     nodo = grafo.nodes[0]
 
@@ -23,14 +23,14 @@ class TestEstadoInfectado(unittest.TestCase):
     def test_el_nodo_no_puede_morir_si_el_tiempo_de_incubacion_es_mayor_a_cero(self):
         tiempo_incubacion = 5
 
-        muere_dada_probabilidad_uno = EstadoInfectado.muereDada(1, tiempo_incubacion)
+        muere_dada_probabilidad_uno = EstadoInfectado.muere_dada(1, tiempo_incubacion)
 
         self.assertEqual(muere_dada_probabilidad_uno, False)
 
     def test_el_nodo_muere_si_la_probabilidad_es_uno_y_tiempo_incubacion_0(self):
         tiempo_incubacion = 0
 
-        muere_dada_probabilidad_uno = EstadoInfectado.muereDada(1, tiempo_incubacion)
+        muere_dada_probabilidad_uno = EstadoInfectado.muere_dada(1, tiempo_incubacion)
 
         self.assertEqual(muere_dada_probabilidad_uno, True)
 

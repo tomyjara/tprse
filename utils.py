@@ -1,11 +1,8 @@
-import random
-
-import networkx as nx
-
-from constantes import S, I, R, M
+from constantes import ESTADO_INCUBANDO, ESTADO_INFECTADO_MILD, ESTADO_INFECTADO_GRAVE, ESTADO_SUSCEPTIBLE, \
+    ESTADO_RECUPERADO, ESTADO_MUERTO
 
 
-def obtenerPorcentajeDeNodosEnEstado(estado, grafo):
+def obtener_porcentaje_de_nodos_en_estado(estado, grafo):
     nodos_totales = len(grafo)
     if nodos_totales == 0:
         raise Exception("La cantidad de nodos debe ser mayor a cero")
@@ -17,110 +14,60 @@ def obtenerPorcentajeDeNodosEnEstado(estado, grafo):
     return nodos_en_estado_estado * 100 / nodos_totales
 
 
-def obtenerPorcentajeDeInfectados(grafo):
-    return obtenerPorcentajeDeNodosEnEstado('EstadoInfectado', grafo)
+def obtener_porcentaje_de_infectados_mild(grafo):
+    return obtener_porcentaje_de_nodos_en_estado(ESTADO_INFECTADO_MILD, grafo)
 
 
-def obtenerPorcentajeDeSusceptibles(grafo):
-    return obtenerPorcentajeDeNodosEnEstado('EstadoSusceptible', grafo)
+def obtener_porcentaje_de_infectados_grave(grafo):
+    return obtener_porcentaje_de_nodos_en_estado(ESTADO_INFECTADO_GRAVE, grafo)
 
 
-def obtenerPorcentajeDeRecuperados(grafo):
-    return obtenerPorcentajeDeNodosEnEstado('EstadoRecuperado', grafo)
+def obtener_porcentaje_de_susceptibles(grafo):
+    return obtener_porcentaje_de_nodos_en_estado(ESTADO_INCUBANDO, grafo)
 
 
-def obtenerPorcentajeDeMuertos(grafo):
-    return obtenerPorcentajeDeNodosEnEstado('EstadoMuerto', grafo)
+def obtener_porcentaje_de_recuperados(grafo):
+    return obtener_porcentaje_de_nodos_en_estado(ESTADO_RECUPERADO, grafo)
 
 
-def mostrarGrafo(G):
-    G.graph['colores'] = [colorEstado(G.nodes[n]['estado']) for n in G.nodes]
-    nx.draw_kamada_kawai(G, node_color=G.graph['colores'], with_labels=True)
+def obtener_porcentaje_de_incubando(grafo):
+    return obtener_porcentaje_de_nodos_en_estado(ESTADO_INCUBANDO, grafo)
 
 
-def seContagiaDada(una_probabilidad):
-    return random.random() < una_probabilidad
-
-
-def muereDada(una_probabilidad, t_incubacion):
-    if not t_incubacion > 0:
-        return random.random() < una_probabilidad
-    else:
-        return False
-
-
-def calcularProbabilidadDeContagio(grafo, nodo):
-    if len(list(grafo.neighbors(nodo))) == 0:
-        return 0
-    else:
-        return (len([vecino for vecino in grafo.neighbors(nodo) if grafo.nodes[vecino]['estado'] == I]) / len(
-            list(grafo.neighbors(nodo))))
-
-
-def mostrarEstadoInicial(modelo, cantidadDeIteraciones):
+def mostrar_estado_inicial(modelo, cantidadDeIteraciones):
     print("\n", "CONFIGURACION INICIAL:")
     print(' - Nodos totales: ', len(modelo))
     print(' - Tipo de grafo: ', modelo.graph['tipo'])
     print(' - Cantidad de iteraciones: ', cantidadDeIteraciones)
-    print(' - Porcentaje de nodos infectados: ', obtenerPorcentajeDeInfectados(modelo))
-    print(' - Porcentaje de nodos susceptibles: ', obtenerPorcentajeDeSusceptibles(modelo))
-    print(' - Porcentaje de nodos recuperados: ', obtenerPorcentajeDeRecuperados(modelo))
-    print(' - Porcentaje de nodos muertos: ', obtenerPorcentajeDeMuertos(modelo), "\n")
+    estado = obtener_estado(modelo)
+    print(' - Porcentaje de nodos susceptibles: ', estado[ESTADO_SUSCEPTIBLE])
+    print(' - Porcentaje de nodos incubando: ', estado[ESTADO_INCUBANDO], "\n")
 
 
-def mostrarEstadoInicial2(modelo, cantidadDeIteraciones):
-    print("\n", "CONFIGURACION INICIAL:")
-    print(' - Nodos totales: ', len(modelo))
-    print(' - Tipo de grafo: ', modelo.graph['tipo'])
-    print(' - Cantidad de iteraciones: ', cantidadDeIteraciones)
-    print(' - Porcentaje de nodos infectados: ', obtenerPorcentajeDeInfectados(modelo))
-    print(' - Porcentaje de nodos susceptibles: ', obtenerPorcentajeDeSusceptibles(modelo))
-    print(' - Porcentaje de nodos recuperados: ', obtenerPorcentajeDeRecuperados(modelo))
-    print(' - Porcentaje de nodos muertos: ', obtenerPorcentajeDeMuertos(modelo), "\n")
-
-
-def mostrarEstadoFinal(modelo):
+def mostrar_estado_final(modelo):
     print("\n", "\n", "ESTADO FINAL:")
-    print(' - Porcentaje de nodos infectados: ', obtenerPorcentajeDeInfectados(modelo))
-    print(' - Porcentaje de nodos susceptibles: ', obtenerPorcentajeDeSusceptibles(modelo))
-    print(' - Porcentaje de nodos recuperados: ', obtenerPorcentajeDeRecuperados(modelo))
-    print(' - Porcentaje de nodos muertos: ', obtenerPorcentajeDeMuertos(modelo), "\n")
+    estado = obtener_estado(modelo)
+    print(' - Porcentaje de nodos infectados mild: ', estado[ESTADO_INFECTADO_MILD])
+    print(' - Porcentaje de nodos infectados grave: ', estado[ESTADO_INFECTADO_GRAVE])
+    print(' - Porcentaje de nodos susceptibles: ', estado[ESTADO_SUSCEPTIBLE])
+    print(' - Porcentaje de nodos recuperados: ', estado[ESTADO_RECUPERADO])
+    print(' - Porcentaje de nodos muertos: ', estado[ESTADO_MUERTO], "\n")
 
 
-def obtenerEstado(modelo):
-    return obtenerPorcentajeDeInfectados(modelo),\
-           obtenerPorcentajeDeSusceptibles(modelo),\
-           obtenerPorcentajeDeRecuperados(modelo),\
-           obtenerPorcentajeDeMuertos(modelo)
+def obtener_estado(grafo):
+    nodos_totales = len(grafo)
+    cantidad_de_nodos_en_estado = {ESTADO_INCUBANDO: 0,
+                                   ESTADO_INFECTADO_MILD: 0,
+                                   ESTADO_INFECTADO_GRAVE: 0,
+                                   ESTADO_SUSCEPTIBLE: 0,
+                                   ESTADO_RECUPERADO: 0,
+                                   ESTADO_MUERTO: 0}
 
+    for nodo in grafo:
+        estadoNodo = grafo.nodes[nodo]['estado'].__class__.__name__
+        cantidad_de_nodos_en_estado[estadoNodo] += 1
 
-'''Falta generar bien el random y el small world'''
+    for key in cantidad_de_nodos_en_estado:
+        cantidad_de_nodos_en_estado[key] = cantidad_de_nodos_en_estado[key] * 100 / nodos_totales
 
-
-def generarGrafoDadoUnTipo(tipoDeGrafo, cantidadDeNodos):
-    if tipoDeGrafo == "scale":
-        grafo = nx.scale_free_graph(cantidadDeNodos)
-    elif tipoDeGrafo == "2d_grid":
-        grafo = nx.grid_graph(dim=[cantidadDeNodos, cantidadDeNodos])
-    elif tipoDeGrafo == "small_world":
-        grafo = nx.watts_strogatz_graph(cantidadDeNodos)
-    elif tipoDeGrafo == "random":
-        grafo = nx.random_regular_graph(1, cantidadDeNodos, 1)
-    elif tipoDeGrafo == "balanced_tree":
-        d = 1  # Grado de salida de los nodos
-        lamb = 1  # Distancia máxima entre par de nodos
-        nx.balanced_tree(d, lamb)
-        grafo = nx.gnm_random_graph(cantidadDeNodos, int(cantidadDeNodos / 2))
-    else:
-        raise Exception("Tipo de grafo invalido")
-
-    return grafo
-
-
-def colorEstado(estado):
-    if estado == S:
-        return 'blue'
-    if estado == I:
-        return 'red'
-    if estado == R:
-        return 'green'
+    return cantidad_de_nodos_en_estado

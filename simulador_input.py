@@ -2,7 +2,7 @@ import sys
 
 import networkx as nx
 
-from modelos import crearModelo2, correrModeloSIRM
+from modelos import crear_modelo_SIRM, correr_modelo_SIRM
 
 
 def main():
@@ -10,14 +10,14 @@ def main():
         tipoDeGrafo = sys.argv[1]
 
         if tipoDeGrafo == "scale":
-            checkParametros(5)
+            check_parametros(5)
             cantidadDeNodos = int(sys.argv[2])
             nextArg = 3
             grafo = nx.scale_free_graph(cantidadDeNodos)
             grafo.graph['tipo'] = "Scale Free"
 
         elif tipoDeGrafo == "grid":
-            checkParametros(6)
+            check_parametros(6)
             cantidadDeNodosX = int(sys.argv[2])
             cantidadDeNodosY = int(sys.argv[3])
             nextArg = 4
@@ -25,7 +25,7 @@ def main():
             grafo.graph['tipo'] = "Grid " + str(cantidadDeNodosX) + "x" + str(cantidadDeNodosY)
 
         elif tipoDeGrafo == "small_world":
-            checkParametros(7)
+            check_parametros(7)
             cantidadDeNodos = int(sys.argv[2])
             vecinosMasCerca = int(sys.argv[3])
             probDeRewiringCadaEje = float(sys.argv[4])
@@ -36,7 +36,7 @@ def main():
             grafo.graph['tipo'] = "Small world"
 
         elif tipoDeGrafo == "random":
-            checkParametros(7)
+            check_parametros(7)
             cantidadDeNodos = int(sys.argv[2])
             gradoSalida = int(sys.argv[3])
             seed = int(sys.argv[4])
@@ -45,7 +45,7 @@ def main():
             grafo.graph['tipo'] = "Random graph"
 
         elif tipoDeGrafo == "balanced_tree":
-            checkParametros(6)
+            check_parametros(6)
             d = int(sys.argv[2])  # Grado de salida de los nodos
             lamb = int(sys.argv[3])  # Distancia máxima entre par de nodos
             nextArg = 4
@@ -62,14 +62,14 @@ def main():
     except ValueError:
         raise Exception("Input numerico invalido")
 
-    modelo = crearModelo2(unGrafo=grafo, probabilidad_de_estar_incubando=probabilidad_de_estar_incubando)
+    modelo = crear_modelo_SIRM(unGrafo=grafo, probabilidad_de_estar_incubando=probabilidad_de_estar_incubando)
 
-    correrModeloSIRM(modelo, cantidad_de_iteraciones)
+    correr_modelo_SIRM(modelo, cantidad_de_iteraciones)
 
 
-def checkParametros(cantParam):
+def check_parametros(cantParam):
     if sys.argv.__len__() > cantParam:
-        raise Exception("Parametros demás")
+        raise Exception("Parametros de más")
 
 
 if __name__ == "__main__":
