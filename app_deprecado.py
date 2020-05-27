@@ -2,7 +2,6 @@ import networkx as nx
 import matplotlib.pyplot as plt
 from matplotlib import animation, rc
 import random
-import time
 
 I = 'I'
 S = 'S'

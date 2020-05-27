@@ -1,33 +1,30 @@
 I = 'I'
-
 S = 'S'
-
 R = 'R'
-
 M = 'M'
 
 T_INCUBACION = 7
-
 T_INFECCION = 14
 
 GRID = '2d_grid'
-
 SCALE_FREE = 'scale'
-
 SMALL_WORLD = 'small_world'
-
 RANDOM = 'random'
 
 PROBABILIDAD_DE_DECESO = 0.02
-
 PROBABILIDAD_DE_DECESO_RIESGO = 0.1
 
 TIEMPO_INF_MILD = 10
-
 T_INF_GRAVE = 21
 
 PROBABILIDAD_RIESGO = 0.5
 
 PROB_INFEC_GRAVE_RIESGO = 0.57
-
 PROB_INFEC_GRAVE = 0.2
+
+ESTADO_INCUBANDO = 'EstadoIncubando'
+ESTADO_SUSCEPTIBLE = 'EstadoSusceptible'
+ESTADO_INFECTADO_MILD = 'EstadoInfectadoMild'
+ESTADO_INFECTADO_GRAVE = 'EstadoInfectadoGrave'
+ESTADO_MUERTO = 'EstadoMuerto'
+ESTADO_RECUPERADO = 'EstadoRecuperado'
