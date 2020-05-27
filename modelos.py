@@ -83,6 +83,9 @@ def correr_modelo_SISM(modelo, cantidadDeIteraciones):
 
 def correr_modelo(modelo, nombre_del_modelo, cantidadDeIteraciones):
     resultados = open('resultados', 'w')
+    resultados.write('incubando' + ',' + 'i_mild' + ',' + 'i_grave' + ',' + 'susceptibles' + ',' + 'recuperados' +
+                     ',' + 'muertos' + '\n')
+
     print("\n", "Corriendo modelo " + nombre_del_modelo)
 
     mostrar_estado_inicial(modelo, cantidadDeIteraciones)
@@ -100,10 +103,7 @@ def correr_modelo(modelo, nombre_del_modelo, cantidadDeIteraciones):
         muertos = nodos_en_estado[ESTADO_MUERTO]
 
         resultados.write(str(incubando) + ',' + str(mild) + ',' + str(grave) + ',' + str(susceptibles) + ',' + str(
-            recuperados) + ',' + str(muertos))
-
-        if i < cantidadDeIteraciones:
-            resultados.write(',')
+            recuperados) + ',' + str(muertos) + '\n')
 
         sys.stdout.write("\r \x1b[1;32m Progreso %d%%" % (int(i * 100 / cantidadDeIteraciones)))
         sys.stdout.flush()
