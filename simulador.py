@@ -1,6 +1,7 @@
 import networkx as nx
 
-from modelos import correr_modelo_SIRM, crear_modelo_SIRM
+from modelos import crear_modelo_SIRM, crear_modelo_SISM, crear_modelo_SIRMS, correr_modelo_SISM, \
+    correr_modelo_SIRM, correr_modelo_SIRMS
 
 
 def main():
@@ -17,30 +18,30 @@ def main():
     # TODO: No balanced tree
     try:
         if num_grafo == '1':
-            cantidadDeNodos = int(input("Cantidad de nodos: "))
-            grafo = nx.scale_free_graph(cantidadDeNodos)
+            cantidad_de_nodos = int(input("Cantidad de nodos: "))
+            grafo = nx.scale_free_graph(cantidad_de_nodos)
             grafo.graph['tipo'] = "Scale Free"
         elif num_grafo == '2':
-            cantidadDeNodosX = int(input("Cantidad nodos X: "))
-            cantidadDeNodosY = int(input("Cantidad nodos Y: "))
-            grafo = nx.grid_graph(dim=[cantidadDeNodosX, cantidadDeNodosY])
-            grafo.graph['tipo'] = "Grid " + str(cantidadDeNodosX) + "x" + str(cantidadDeNodosY)
+            cantidad_de_nodos_x = int(input("Cantidad nodos X: "))
+            cantidad_de_nodos_y = int(input("Cantidad nodos Y: "))
+            grafo = nx.grid_graph(dim=[cantidad_de_nodos_x, cantidad_de_nodos_y])
+            grafo.graph['tipo'] = "Grid " + str(cantidad_de_nodos_x) + "x" + str(cantidad_de_nodos_y)
         elif num_grafo == '3':
-            cantidadDeNodos = int(input("Cantidad de nodos: "))
-            vecinosMasCerca = int(input("Cantidad de vecinos: "))
-            probDeRewiringCadaEje = float(input("Probabilidad de rewiring [0,1]: "))
+            cantidad_de_nodos = int(input("Cantidad de nodos: "))
+            vecinos_mas_cerca = int(input("Cantidad de vecinos: "))
+            prob_de_rewiring_cada_eje = float(input("Probabilidad de rewiring [0,1]: "))
 
-            if probDeRewiringCadaEje > 1 or probDeRewiringCadaEje < 0:
+            if prob_de_rewiring_cada_eje > 1 or prob_de_rewiring_cada_eje < 0:
                 print("Invalid probability")
                 return
 
-            grafo = nx.watts_strogatz_graph(cantidadDeNodos, vecinosMasCerca, probDeRewiringCadaEje)
+            grafo = nx.watts_strogatz_graph(cantidad_de_nodos, vecinos_mas_cerca, prob_de_rewiring_cada_eje)
             grafo.graph['tipo'] = "Small world"
         elif num_grafo == '4':
-            gradoDeNodo = int(input("Grado de salida de los nodos: "))
-            cantidadDeNodos = int(input("Cantidad de nodos: "))
+            grado_de_nodo = int(input("Grado de salida de los nodos: "))
+            cantidad_de_nodos = int(input("Cantidad de nodos: "))
             seed = int(input("Seed: "))
-            grafo = nx.random_regular_graph(gradoDeNodo, cantidadDeNodos, seed)
+            grafo = nx.random_regular_graph(grado_de_nodo, cantidad_de_nodos, seed)
             grafo.graph['tipo'] = "Random graph"
         elif num_grafo == '5':
             d = int(input("Grado de salida de los nodos: "))
@@ -56,10 +57,22 @@ def main():
         if probabilidad_de_estar_incubando > 1 or probabilidad_de_estar_incubando < 0:
             raise Exception("Probabilidad inválida")
 
-        modelo = crear_modelo_SIRM(unGrafo=grafo, probabilidad_de_estar_incubando=probabilidad_de_estar_incubando)
+        print("Elegí el modelo:\n"
+              "[1] SIS\n"
+              "[2] SIR\n"
+              "[3] SIRS\n")
 
-        correr_modelo_SIRM(modelo, cantidad_de_iteraciones)
+        input_modelo = input("Numero: ")
 
+        if input_modelo == '1':
+            modelo = crear_modelo_SISM(unGrafo=grafo, probabilidad_de_estar_incubando=probabilidad_de_estar_incubando)
+            correr_modelo_SISM(modelo, cantidad_de_iteraciones)
+        elif input_modelo == '2':
+            modelo = crear_modelo_SIRM(unGrafo=grafo, probabilidad_de_estar_incubando=probabilidad_de_estar_incubando)
+            correr_modelo_SIRM(modelo, cantidad_de_iteraciones)
+        elif input_modelo == '3':
+            modelo = crear_modelo_SIRMS(un_grafo=grafo, probabilidad_de_estar_incubando=probabilidad_de_estar_incubando)
+            correr_modelo_SIRMS(modelo, cantidad_de_iteraciones)
     except ValueError:
         raise Exception("Input numerico invalido")
 
