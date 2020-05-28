@@ -65,10 +65,10 @@ def main():
         input_modelo = input("Numero: ")
 
         if input_modelo == '1':
-            modelo = crear_modelo_SISM(unGrafo=grafo, probabilidad_de_estar_incubando=probabilidad_de_estar_incubando)
+            modelo = crear_modelo_SISM(un_grafo=grafo, probabilidad_de_estar_incubando=probabilidad_de_estar_incubando)
             correr_modelo_SISM(modelo, cantidad_de_iteraciones)
         elif input_modelo == '2':
-            modelo = crear_modelo_SIRM(unGrafo=grafo, probabilidad_de_estar_incubando=probabilidad_de_estar_incubando)
+            modelo = crear_modelo_SIRM(un_grafo=grafo, probabilidad_de_estar_incubando=probabilidad_de_estar_incubando)
             correr_modelo_SIRM(modelo, cantidad_de_iteraciones)
         elif input_modelo == '3':
             modelo = crear_modelo_SIRMS(un_grafo=grafo, probabilidad_de_estar_incubando=probabilidad_de_estar_incubando)
