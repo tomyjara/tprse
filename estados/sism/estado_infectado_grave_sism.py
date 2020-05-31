@@ -19,11 +19,12 @@ class EstadoInfectadoGraveSISM(EstadoInfectado):
         if self.tiempo_infeccion == 0:
             estado_actual = EstadoSusceptibleSISM()
 
-        if grafo.nodes[nodo]['riesgo']:
-            if self.muere_dada(grafo.graph['prob_de_deceso_riesgo']):
-                estado_actual = EstadoMuerto()
         else:
-            if self.muere_dada(grafo.graph['prob_de_deceso']):
-                estado_actual = EstadoMuerto()
+            if grafo.nodes[nodo]['riesgo']:
+                if self.muere_dada(grafo.graph['prob_de_deceso_riesgo']):
+                    estado_actual = EstadoMuerto()
+            else:
+                if self.muere_dada(grafo.graph['prob_de_deceso']):
+                    estado_actual = EstadoMuerto()
 
         return estado_actual
