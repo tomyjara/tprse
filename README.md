@@ -21,24 +21,6 @@ Los resultados se guardan en el archivo 'resultados', en la misma carpeta donde 
 el primero es el porcentaje de infectados, luego sigue el de susceptibles, el de recuperados y el de muertos. Cada lote de 4 valores representa el estado del
 modelo en la n-esima iteracion
 
-Tareas Tomi:
-
--agrager nuevo estado muerto LISTO
--agregar tasa de letalidad y dividir en poblaciones de riesgo(averiguar) //LISTO solo agrego tasa de letalidad
--en cada iteracion se tira una moneda que representa si muere segun su probabilidad(mientras esta infectado post incubacion) LISTO
--mientras lo incubo contagio, tiempo de incubacion 6-14 días(usar promedio), contagia pero no muere LISTO
--no puede morir hasta despues del promedio del tiempo de incubacion ti > 10 LISTO
--medir en unidades
-
-
-Tareas Juli:
-
--armar grafos que pidio esteban
--analizar bien random graph
--data en funcion del tiempo
--data en funcion de los infectados
--cantidad de nuevos infectados x dia
--averiguar ti y ri
 
 Preguntas?
 
@@ -63,3 +45,19 @@ Medimos:
 -casos nuevos en la última semana según total de infectadosx
 
 
+CONSIDERACIONES EXPERIMENTOS:
+
+Experimento 2:
+
+ - Ver que la cantidad de ejes sea constatnte para cada tipo de grafo en base a la cantidad de nodos
+ - El tamaño del grafo es igual en todos los modelos(cantidad de nodos)
+ - Tomamos un estandar de 1% de nodos incubando inicial
+ - Cantidad de nodos totales, 3 medidas
+ - Medimos: nuevos infectados por unidad, mortalidad
+ - Corremos 10 iteraciones y obtenemos promedio por cada configuracion
+ - ver a partir de que momento no se ven cambios relevantes(el virus no progresa)
+ - 365 unidades y 50000 nodos y 0.01 probabilidad de estar incubando
+
+
+TODO
+- revisar parametros estandar

@@ -39,19 +39,24 @@ def mostrar_estado_inicial(modelo, cantidadDeIteraciones):
     print(' - Nodos totales: ', len(modelo))
     print(' - Tipo de grafo: ', modelo.graph['tipo'])
     print(' - Cantidad de iteraciones: ', cantidadDeIteraciones)
+
     estado = obtener_estado(modelo)
-    print(' - Porcentaje de nodos susceptibles: ', estado[ESTADO_SUSCEPTIBLE])
-    print(' - Porcentaje de nodos incubando: ', estado[ESTADO_INCUBANDO], "\n")
+
+    print(' - Porcentaje de nodos susceptibles: ', round(estado[ESTADO_SUSCEPTIBLE], 2))
+    print(' - Porcentaje de nodos incubando: ', round(estado[ESTADO_INCUBANDO], 2), "\n")
 
 
 def mostrar_estado_final(modelo):
     print("\n", "\n", "ESTADO FINAL:")
+
     estado = obtener_estado(modelo)
-    print(' - Porcentaje de nodos infectados mild: ', estado[ESTADO_INFECTADO_MILD])
-    print(' - Porcentaje de nodos infectados grave: ', estado[ESTADO_INFECTADO_GRAVE])
-    print(' - Porcentaje de nodos susceptibles: ', estado[ESTADO_SUSCEPTIBLE])
-    print(' - Porcentaje de nodos recuperados: ', estado[ESTADO_RECUPERADO])
-    print(' - Porcentaje de nodos muertos: ', estado[ESTADO_MUERTO], "\n")
+
+    print(' - Porcentaje de nodos incubando: ', round(estado[ESTADO_INCUBANDO], 2))
+    print(' - Porcentaje de nodos infectados mild: ', round(estado[ESTADO_INFECTADO_MILD], 2))
+    print(' - Porcentaje de nodos infectados grave: ', round(estado[ESTADO_INFECTADO_GRAVE], 2))
+    print(' - Porcentaje de nodos susceptibles: ', round(estado[ESTADO_SUSCEPTIBLE], 2))
+    print(' - Porcentaje de nodos recuperados: ', round(estado[ESTADO_RECUPERADO], 2))
+    print(' - Porcentaje de nodos muertos: ', round(estado[ESTADO_MUERTO], 2), "\n")
 
 
 def obtener_estado(grafo):
