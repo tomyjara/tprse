@@ -10,12 +10,10 @@ from modelos import crear_modelo_SIRM, iterar_modelo
 
 
 class TestSIRM(unittest.TestCase):
-
     cantidad_de_nodos = 1
 
     grid = nx.grid_graph(dim=[cantidad_de_nodos, cantidad_de_nodos])
     scale_free = nx.scale_free_graph(cantidad_de_nodos)
-
 
     def test_creoModeloSIRMCon1NodoDeRiesgoGRID(self):
         grafo = crear_modelo_SIRM(self.grid, tiempo_incubacion=0, tiempo_inf_mild=0, probabilidad_de_estar_incubando=0,
@@ -29,12 +27,6 @@ class TestSIRM(unittest.TestCase):
 
         self.assertSonNodosDeRiesgo(grafo)
 
-    # def test_creoModeloSIRMCon1NodoDeRiesgoSmallWorld(self):
-    #     grafo = crearModelo2(SMALL_WORLD, self.cantidad_de_nodos, probabilidad_de_estar_incubando=0,
-    #                          tiempo_inf_mild=0, tiempo_incubacion=0, probabilidad_riesgo=1)
-    #
-    #     self.assertSonNodosDeRiesgo(grafo)
-
     def test_creoModeloSIRMConNingunNodoDeRiesgo(self):
         grafo = crear_modelo_SIRM(self.grid, tiempo_incubacion=0, tiempo_inf_mild=0, probabilidad_de_estar_incubando=0,
                                   probabilidad_riesgo=0)
@@ -42,7 +34,8 @@ class TestSIRM(unittest.TestCase):
 
     def test_transicionoIncubandoAInfectadoMildRiesgoYRecupera(self):
         grafo = crear_modelo_SIRM(self.grid, tiempo_incubacion=1, tiempo_inf_mild=1, probabilidad_de_estar_incubando=1,
-                                  probabilidad_riesgo=1, probabilidad_infecc_grave_riesgo=0, probabilidad_infecc_grave=0)
+                                  probabilidad_riesgo=1, probabilidad_infecc_grave_riesgo=0,
+                                  probabilidad_infecc_grave=0)
 
         self.assertSonNodosDeRiesgo(grafo)
 
@@ -54,7 +47,8 @@ class TestSIRM(unittest.TestCase):
 
     def test_transicionoIncubandoAInfectadoMildNoRiesgoYRecupera(self):
         grafo = crear_modelo_SIRM(self.grid, tiempo_incubacion=1, tiempo_inf_mild=1, probabilidad_de_estar_incubando=1,
-                                  probabilidad_riesgo=0, probabilidad_infecc_grave_riesgo=0, probabilidad_infecc_grave=0)
+                                  probabilidad_riesgo=0, probabilidad_infecc_grave_riesgo=0,
+                                  probabilidad_infecc_grave=0)
 
         self.assertNoSonNodosDeRiesgo(grafo)
 
@@ -66,7 +60,8 @@ class TestSIRM(unittest.TestCase):
 
     def test_transicionoIncubandoAInfectadoGraveRiesgoYMuere(self):
         grafo = crear_modelo_SIRM(self.grid, tiempo_incubacion=1, tiempo_inf_mild=0, tiempo_inf_grave=2,
-                                  probabilidad_de_estar_incubando=1, probabilidad_riesgo=1, probabilidad_infecc_grave_riesgo=1,
+                                  probabilidad_de_estar_incubando=1, probabilidad_riesgo=1,
+                                  probabilidad_infecc_grave_riesgo=1,
                                   probabilidad_infecc_grave=0, probabilidad_deceso_riesgo=1)
 
         self.assertSonNodosDeRiesgo(grafo)
@@ -81,7 +76,8 @@ class TestSIRM(unittest.TestCase):
 
     def test_transicionoIncubandoAInfectadoGraveRiesgoYRecupera(self):
         grafo = crear_modelo_SIRM(self.grid, tiempo_incubacion=1, tiempo_inf_mild=0, tiempo_inf_grave=2,
-                                  probabilidad_de_estar_incubando=1, probabilidad_riesgo=1, probabilidad_infecc_grave_riesgo=1,
+                                  probabilidad_de_estar_incubando=1, probabilidad_riesgo=1,
+                                  probabilidad_infecc_grave_riesgo=1,
                                   probabilidad_infecc_grave=0, probabilidad_deceso_riesgo=0)
 
         self.assertSonNodosDeRiesgo(grafo)
@@ -97,7 +93,8 @@ class TestSIRM(unittest.TestCase):
     def test_transicionoIncubandoAInfectadoGraveYMuere(self):
         grafo = crear_modelo_SIRM(self.grid, tiempo_incubacion=1, tiempo_inf_mild=0, tiempo_inf_grave=2,
                                   probabilidad_de_estar_incubando=1, probabilidad_deceso=1, probabilidad_riesgo=0,
-                                  probabilidad_infecc_grave_riesgo=0, probabilidad_infecc_grave=1, probabilidad_deceso_riesgo=0)
+                                  probabilidad_infecc_grave_riesgo=0, probabilidad_infecc_grave=1,
+                                  probabilidad_deceso_riesgo=0)
 
         self.assertNoSonNodosDeRiesgo(grafo)
 
@@ -109,7 +106,8 @@ class TestSIRM(unittest.TestCase):
 
     def test_transicionoIncubandoAInfectadoGraveYRecupera(self):
         grafo = crear_modelo_SIRM(self.grid, tiempo_incubacion=1, tiempo_inf_mild=0, tiempo_inf_grave=2,
-                                  probabilidad_de_estar_incubando=1, probabilidad_riesgo=0, probabilidad_infecc_grave_riesgo=1,
+                                  probabilidad_de_estar_incubando=1, probabilidad_riesgo=0,
+                                  probabilidad_infecc_grave_riesgo=1,
                                   probabilidad_infecc_grave=1, probabilidad_deceso_riesgo=0)
 
         self.assertNoSonNodosDeRiesgo(grafo)
