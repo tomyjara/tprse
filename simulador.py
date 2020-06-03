@@ -6,6 +6,14 @@ from modelos import crear_modelo_SIRM, crear_modelo_SISM, crear_modelo_SIRMS, co
 
 def main():
     global grafo
+
+    print("Elegí el modelo:\n"
+          "[1] SIS\n"
+          "[2] SIR\n"
+          "[3] SIRS\n")
+
+    input_modelo = input("Numero: ")
+
     print("Elegí el grafo:\n"
           "[1] Scale\n"
           "[2] Grid\n"
@@ -56,13 +64,6 @@ def main():
 
         if probabilidad_de_estar_incubando > 1 or probabilidad_de_estar_incubando < 0:
             raise Exception("Probabilidad inválida")
-
-        print("Elegí el modelo:\n"
-              "[1] SIS\n"
-              "[2] SIR\n"
-              "[3] SIRS\n")
-
-        input_modelo = input("Numero: ")
 
         if input_modelo == '1':
             modelo = crear_modelo_SISM(un_grafo=grafo, probabilidad_de_estar_incubando=probabilidad_de_estar_incubando)
