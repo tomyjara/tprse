@@ -1,5 +1,6 @@
 import random
 import sys
+import os
 
 from constantes import PROB_DE_DECESO, T_INCUBACION, PROBABILIDAD_RIESGO, \
     PROB_INFEC_GRAVE_RIESGO, PROB_INFEC_GRAVE, T_INF_MILD, PROB_DE_DECESO_RIESGO, T_INF_GRAVE, \
@@ -104,46 +105,51 @@ def crear_modelo_SISM(un_grafo,
     return un_grafo
 
 
-def correr_modelo_SIRM(modelo, cantidad_de_iteraciones):
-    correr_modelo(modelo, 'SIRM', cantidad_de_iteraciones)
+def correr_modelo_SIRM(modelo, cantidad_de_iteraciones, repeticiones):
+    correr_modelo(modelo, 'SIRM', cantidad_de_iteraciones, repeticiones)
 
 
-def correr_modelo_SISM(modelo, cantidad_de_iteraciones):
-    correr_modelo(modelo, 'SISM', cantidad_de_iteraciones)
+def correr_modelo_SISM(modelo, cantidad_de_iteraciones, repeticiones):
+    correr_modelo(modelo, 'SISM', cantidad_de_iteraciones, repeticiones)
 
 
-def correr_modelo_SIRMS(modelo, cantidad_de_iteraciones):
-    correr_modelo(modelo, 'SIRMS', cantidad_de_iteraciones)
+def correr_modelo_SIRMS(modelo, cantidad_de_iteraciones, repeticiones):
+    correr_modelo(modelo, 'SIRMS', cantidad_de_iteraciones, repeticiones)
 
 
-def correr_modelo(modelo, nombre_del_modelo, cantidad_de_iteraciones):
-    resultados = open('resultados', 'w')
-    resultados.write('incubando' + ',' + 'i_mild' + ',' + 'i_grave' + ',' + 'susceptibles' + ',' + 'recuperados' +
-                     ',' + 'muertos' + '\n')
+def correr_modelo(modelo, nombre_del_modelo, cantidad_de_iteraciones, repeticiones):
+    resultados = open('resultados', 'a+')
+
+    if os.stat("resultados").st_size == 0:
+        resultados.write(
+            'repeticion' + ',' + 'iteracion' + ',' + 'modelo' + ',' + 'incubando' + ',' + 'i_mild' + ',' + 'i_grave' + ',' + 'susceptibles' + ',' + 'recuperados' +
+            ',' + 'muertos' + '\n')
 
     print("\n", "Corriendo modelo " + nombre_del_modelo)
 
     mostrar_estado_inicial(modelo, cantidad_de_iteraciones)
+    for j in range(0, repeticiones):
+        for i in range(1, cantidad_de_iteraciones + 1):
+            iterar_modelo(modelo)
 
-    for i in range(1, cantidad_de_iteraciones + 1):
-        iterar_modelo(modelo)
+            nodos_en_estado = obtener_estado(modelo)
 
-        nodos_en_estado = obtener_estado(modelo)
+            incubando = nodos_en_estado[ESTADO_INCUBANDO]
+            mild = nodos_en_estado[ESTADO_INFECTADO_MILD]
+            grave = nodos_en_estado[ESTADO_INFECTADO_GRAVE]
+            susceptibles = nodos_en_estado[ESTADO_SUSCEPTIBLE]
+            recuperados = nodos_en_estado[ESTADO_RECUPERADO]
+            muertos = nodos_en_estado[ESTADO_MUERTO]
 
-        incubando = nodos_en_estado[ESTADO_INCUBANDO]
-        mild = nodos_en_estado[ESTADO_INFECTADO_MILD]
-        grave = nodos_en_estado[ESTADO_INFECTADO_GRAVE]
-        susceptibles = nodos_en_estado[ESTADO_SUSCEPTIBLE]
-        recuperados = nodos_en_estado[ESTADO_RECUPERADO]
-        muertos = nodos_en_estado[ESTADO_MUERTO]
+            resultados.write(
+                str(j) + ',' + str(i) + ',' + nombre_del_modelo + ',' + str(incubando) + ',' + str(mild) + ',' + str(
+                    grave) + ',' + str(susceptibles) + ',' + str(
+                    recuperados) + ',' + str(muertos) + '\n')
 
-        resultados.write(str(incubando) + ',' + str(mild) + ',' + str(grave) + ',' + str(susceptibles) + ',' + str(
-            recuperados) + ',' + str(muertos) + '\n')
+            sys.stdout.write("\r \x1b[1;32m Progreso %d%%" % (int(i * 100 / cantidad_de_iteraciones)))
+            sys.stdout.flush()
 
-        sys.stdout.write("\r \x1b[1;32m Progreso %d%%" % (int(i * 100 / cantidad_de_iteraciones)))
-        sys.stdout.flush()
-
-    sys.stdout.write("\x1b[0m")
+        sys.stdout.write("\x1b[0m")
 
     resultados.close()
     mostrar_estado_final(modelo)
