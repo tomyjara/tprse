@@ -1,8 +1,8 @@
 import random
 import sys
 
-from constantes import PROBABILIDAD_DE_DECESO, T_INCUBACION, PROBABILIDAD_RIESGO, \
-    PROB_INFEC_GRAVE_RIESGO, PROB_INFEC_GRAVE, TIEMPO_INF_MILD, PROBABILIDAD_DE_DECESO_RIESGO, T_INF_GRAVE, \
+from constantes import PROB_DE_DECESO, T_INCUBACION, PROBABILIDAD_RIESGO, \
+    PROB_INFEC_GRAVE_RIESGO, PROB_INFEC_GRAVE, T_INF_MILD, PROB_DE_DECESO_RIESGO, T_INF_GRAVE, \
     ESTADO_INCUBANDO, ESTADO_INFECTADO_MILD, ESTADO_SUSCEPTIBLE, ESTADO_INFECTADO_GRAVE, ESTADO_RECUPERADO, \
     ESTADO_MUERTO, T_RECUPERACION
 from estados.sirm.estado_incubando_sirm import EstadoIncubandoSIRM
@@ -23,14 +23,14 @@ def iterar_modelo(G):
 
 def crear_modelo_SIRM(un_grafo,
                       tiempo_incubacion=T_INCUBACION,
-                      tiempo_inf_mild=TIEMPO_INF_MILD,
+                      tiempo_inf_mild=T_INF_MILD,
                       tiempo_inf_grave=T_INF_GRAVE,
                       probabilidad_de_estar_incubando=0,
-                      probabilidad_deceso=PROBABILIDAD_DE_DECESO,
+                      probabilidad_deceso=PROB_DE_DECESO,
                       probabilidad_riesgo=PROBABILIDAD_RIESGO,
                       probabilidad_infecc_grave_riesgo=PROB_INFEC_GRAVE_RIESGO,
                       probabilidad_infecc_grave=PROB_INFEC_GRAVE,
-                      probabilidad_deceso_riesgo=PROBABILIDAD_DE_DECESO_RIESGO):
+                      probabilidad_deceso_riesgo=PROB_DE_DECESO_RIESGO):
     for n in un_grafo.nodes:
         un_grafo.nodes[n]['estado'] = EstadoIncubandoSIRM(
             tiempo_incubacion) if random.random() < probabilidad_de_estar_incubando else EstadoSusceptibleSIRM()
@@ -50,15 +50,15 @@ def crear_modelo_SIRM(un_grafo,
 
 def crear_modelo_SIRMS(un_grafo,
                        tiempo_incubacion=T_INCUBACION,
-                       tiempo_inf_mild=TIEMPO_INF_MILD,
+                       tiempo_inf_mild=T_INF_MILD,
                        tiempo_inf_grave=T_INF_GRAVE,
                        tiempo_recuperacion=T_RECUPERACION,
                        probabilidad_de_estar_incubando=0,
-                       probabilidad_deceso=PROBABILIDAD_DE_DECESO,
+                       probabilidad_deceso=PROB_DE_DECESO,
                        probabilidad_riesgo=PROBABILIDAD_RIESGO,
                        probabilidad_infecc_grave_riesgo=PROB_INFEC_GRAVE_RIESGO,
                        probabilidad_infecc_grave=PROB_INFEC_GRAVE,
-                       probabilidad_deceso_riesgo=PROBABILIDAD_DE_DECESO_RIESGO):
+                       probabilidad_deceso_riesgo=PROB_DE_DECESO_RIESGO):
     for n in un_grafo.nodes:
         un_grafo.nodes[n]['estado'] = EstadoIncubandoSIRMS(
             tiempo_incubacion) if random.random() < probabilidad_de_estar_incubando else EstadoSusceptibleSIRMS()
@@ -79,14 +79,14 @@ def crear_modelo_SIRMS(un_grafo,
 
 def crear_modelo_SISM(un_grafo,
                       tiempo_incubacion=T_INCUBACION,
-                      tiempo_inf_mild=TIEMPO_INF_MILD,
+                      tiempo_inf_mild=T_INF_MILD,
                       tiempo_inf_grave=T_INF_GRAVE,
                       probabilidad_de_estar_incubando=0,
-                      probabilidad_deceso=PROBABILIDAD_DE_DECESO,
+                      probabilidad_deceso=PROB_DE_DECESO,
                       probabilidad_riesgo=PROBABILIDAD_RIESGO,
                       probabilidad_infecc_grave_riesgo=PROB_INFEC_GRAVE_RIESGO,
                       probabilidad_infecc_grave=PROB_INFEC_GRAVE,
-                      probabilidad_deceso_riesgo=PROBABILIDAD_DE_DECESO_RIESGO):
+                      probabilidad_deceso_riesgo=PROB_DE_DECESO_RIESGO):
     for n in un_grafo.nodes:
         un_grafo.nodes[n]['estado'] = EstadoIncubandoSISM(
             tiempo_incubacion) if random.random() < probabilidad_de_estar_incubando else EstadoSusceptibleSISM()
