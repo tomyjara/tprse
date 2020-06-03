@@ -33,7 +33,7 @@ def main():
             prob_de_rewiring_cada_eje = float(sys.argv[5])
             next_arg = 5
             if prob_de_rewiring_cada_eje < 0 or prob_de_rewiring_cada_eje > 1:
-                raise Exception("Probabilidad inválida")
+                raise Exception("Probabilidad invalida")
             grafo = nx.watts_strogatz_graph(cantidad_de_nodos, vecinos_mas_cerca, prob_de_rewiring_cada_eje)
             grafo.graph['tipo'] = "Small world"
 
@@ -49,7 +49,7 @@ def main():
         elif tipo_de_grafo == "balanced_tree":
             check_parametros(6)
             d = int(sys.argv[3])  # Grado de salida de los nodos
-            lamb = int(sys.argv[4])  # Distancia máxima entre par de nodos
+            lamb = int(sys.argv[4])  # Distancia maxima entre par de nodos
             next_arg = 4
             grafo = nx.balanced_tree(d, lamb)
             grafo.graph['tipo'] = "Balanced Tree"
@@ -78,7 +78,7 @@ def main():
 
 def check_parametros(cant_param):
     if sys.argv.__len__() > cant_param:
-        raise Exception("Parametros de más")
+        raise Exception("Parametros de mas")
 
 
 if __name__ == "__main__":
