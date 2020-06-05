@@ -7,6 +7,10 @@ from modelos import crear_modelo_SIRM, crear_modelo_SISM, crear_modelo_SIRMS, co
 def main():
     global grafo
 
+    print("Cantidad de veces que corre: ")
+
+    repeticiones = input("Numero: ")
+
     print("Elegí el modelo:\n"
           "[1] SIS\n"
           "[2] SIR\n"
@@ -67,13 +71,13 @@ def main():
 
         if input_modelo == '1':
             modelo = crear_modelo_SISM(un_grafo=grafo, probabilidad_de_estar_incubando=probabilidad_de_estar_incubando)
-            correr_modelo_SISM(modelo, cantidad_de_iteraciones)
+            correr_modelo_SISM(modelo, cantidad_de_iteraciones, repeticiones)
         elif input_modelo == '2':
             modelo = crear_modelo_SIRM(un_grafo=grafo, probabilidad_de_estar_incubando=probabilidad_de_estar_incubando)
-            correr_modelo_SIRM(modelo, cantidad_de_iteraciones)
+            correr_modelo_SIRM(modelo, cantidad_de_iteraciones, repeticiones)
         elif input_modelo == '3':
             modelo = crear_modelo_SIRMS(un_grafo=grafo, probabilidad_de_estar_incubando=probabilidad_de_estar_incubando)
-            correr_modelo_SIRMS(modelo, cantidad_de_iteraciones)
+            correr_modelo_SIRMS(modelo, cantidad_de_iteraciones, repeticiones)
     except ValueError:
         raise Exception("Input numerico invalido")
 
