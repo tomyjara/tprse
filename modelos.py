@@ -126,9 +126,11 @@ def correr_modelo(modelo, nombre_del_modelo, cantidad_de_iteraciones, repeticion
             ',' + 'muertos' + '\n')
 
     print("\n", "Corriendo modelo " + nombre_del_modelo)
-
+    modelo_inicial = modelo.copy()
     mostrar_estado_inicial(modelo, cantidad_de_iteraciones)
     for j in range(0, repeticiones):
+        modelo = modelo_inicial.copy()
+
         for i in range(1, cantidad_de_iteraciones + 1):
             iterar_modelo(modelo)
 
