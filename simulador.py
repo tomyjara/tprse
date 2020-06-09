@@ -9,7 +9,7 @@ def main():
 
     print("Cantidad de veces que corre: ")
 
-    repeticiones = input("Numero: ")
+    repeticiones = int(input("Numero: "))
 
     print("Elegí el modelo:\n"
           "[1] SIS\n"

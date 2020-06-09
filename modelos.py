@@ -1,3 +1,4 @@
+import copy
 import random
 import sys
 import os
@@ -126,15 +127,14 @@ def correr_modelo(modelo, nombre_del_modelo, cantidad_de_iteraciones, repeticion
             ',' + 'muertos' + '\n')
 
     print("\n", "Corriendo modelo " + nombre_del_modelo)
-    modelo_inicial = modelo.copy()
-    mostrar_estado_inicial(modelo, cantidad_de_iteraciones)
-    for j in range(0, repeticiones):
-        modelo = modelo_inicial.copy()
 
-        for i in range(1, cantidad_de_iteraciones + 1):
-            iterar_modelo(modelo)
+    for j in range(repeticiones):
+        modelo_actual = copy.deepcopy(modelo)
+        mostrar_estado_inicial(modelo_actual, cantidad_de_iteraciones)
 
-            nodos_en_estado = obtener_estado(modelo)
+        for i in range(cantidad_de_iteraciones):
+
+            nodos_en_estado = obtener_estado(modelo_actual)
 
             incubando = nodos_en_estado[ESTADO_INCUBANDO]
             mild = nodos_en_estado[ESTADO_INFECTADO_MILD]
@@ -148,10 +148,12 @@ def correr_modelo(modelo, nombre_del_modelo, cantidad_de_iteraciones, repeticion
                     grave) + ',' + str(susceptibles) + ',' + str(
                     recuperados) + ',' + str(muertos) + '\n')
 
+            iterar_modelo(modelo_actual)
+
             sys.stdout.write("\r \x1b[1;32m Progreso %d%%" % (int(i * 100 / cantidad_de_iteraciones)))
             sys.stdout.flush()
 
         sys.stdout.write("\x1b[0m")
+        mostrar_estado_final(modelo_actual)
 
     resultados.close()
-    mostrar_estado_final(modelo)
