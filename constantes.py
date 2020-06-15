@@ -23,8 +23,8 @@ PROBABILIDAD_RIESGO = 0.25
 # Fuente: https://www.statista.com/statistics/1105402/covid-hospitalization-rates-us-by-age-group/
 PROB_INFEC_GRAVE_RIESGO = 0.57
 PROB_INFEC_GRAVE = 0.2
-PROB_DE_DECESO = 0.02
-PROB_DE_DECESO_RIESGO = 0.1
+PROB_DE_DECESO = 0.000971067
+PROB_DE_DECESO_RIESGO = 0.00529539
 
 # Estados
 ESTADO_INCUBANDO = 'EstadoIncubando'
