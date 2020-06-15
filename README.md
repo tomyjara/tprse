@@ -51,7 +51,6 @@ Experimento 2:
 
  - Ver que la cantidad de ejes sea constatnte para cada tipo de grafo en base a la cantidad de nodos
  - El tamaño del grafo es igual en todos los modelos(cantidad de nodos)
- - Tomamos un estandar de 1% de nodos incubando inicial
  - Cantidad de nodos totales, 3 medidas
  - Medimos: nuevos infectados por unidad, mortalidad
  - Corremos 10 iteraciones y obtenemos promedio por cada configuracion
