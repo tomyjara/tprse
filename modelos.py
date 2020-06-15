@@ -106,34 +106,33 @@ def crear_modelo_SISM(un_grafo,
     return un_grafo
 
 
-def correr_modelo_SIRM(modelo, cantidad_de_iteraciones, repeticiones):
-    correr_modelo(modelo, 'SIRM', cantidad_de_iteraciones, repeticiones)
+def correr_modelo_SIRM(modelo, cantidad_de_iteraciones, repeticiones, nombre_archivo_salida):
+    correr_modelo(modelo, 'SIRM', cantidad_de_iteraciones, repeticiones, nombre_archivo_salida)
 
 
-def correr_modelo_SISM(modelo, cantidad_de_iteraciones, repeticiones):
-    correr_modelo(modelo, 'SISM', cantidad_de_iteraciones, repeticiones)
+def correr_modelo_SISM(modelo, cantidad_de_iteraciones, repeticiones, nombre_archivo_salida):
+    correr_modelo(modelo, 'SISM', cantidad_de_iteraciones, repeticiones, nombre_archivo_salida)
 
 
-def correr_modelo_SIRMS(modelo, cantidad_de_iteraciones, repeticiones):
-    correr_modelo(modelo, 'SIRMS', cantidad_de_iteraciones, repeticiones)
+def correr_modelo_SIRMS(modelo, cantidad_de_iteraciones, repeticiones, nombre_archivo_salida):
+    correr_modelo(modelo, 'SIRMS', cantidad_de_iteraciones, repeticiones, nombre_archivo_salida)
 
 
-def correr_modelo(modelo, nombre_del_modelo, cantidad_de_iteraciones, repeticiones):
-    resultados = open('resultados', 'a+')
+def correr_modelo(modelo, nombre_del_modelo, cantidad_de_iteraciones, repeticiones, nombre_archivo_salida):
+    resultados = open(nombre_archivo_salida, 'w')
 
-    if os.stat("resultados").st_size == 0:
-        resultados.write(
-            'repeticion' + ',' + 'iteracion' + ',' + 'modelo' + ',' + 'incubando' + ',' + 'i_mild' + ',' + 'i_grave' + ',' + 'susceptibles' + ',' + 'recuperados' +
-            ',' + 'muertos' + '\n')
+    resultados.write('incubando' + ',' + 'i_mild' + ',' + 'i_grave' + ',' + 'susceptibles' + ',' + 'recuperados' +
+                     ',' + 'muertos' + '\n')
 
     print("\n", "Corriendo modelo " + nombre_del_modelo)
+
+    resultados_memoria = [[0, 0, 0, 0, 0, 0] for i in range(cantidad_de_iteraciones)]
 
     for j in range(repeticiones):
         modelo_actual = copy.deepcopy(modelo)
         mostrar_estado_inicial(modelo_actual, cantidad_de_iteraciones)
 
         for i in range(cantidad_de_iteraciones):
-
             nodos_en_estado = obtener_estado(modelo_actual)
 
             incubando = nodos_en_estado[ESTADO_INCUBANDO]
@@ -143,10 +142,17 @@ def correr_modelo(modelo, nombre_del_modelo, cantidad_de_iteraciones, repeticion
             recuperados = nodos_en_estado[ESTADO_RECUPERADO]
             muertos = nodos_en_estado[ESTADO_MUERTO]
 
-            resultados.write(
-                str(j) + ',' + str(i) + ',' + nombre_del_modelo + ',' + str(incubando) + ',' + str(mild) + ',' + str(
-                    grave) + ',' + str(susceptibles) + ',' + str(
-                    recuperados) + ',' + str(muertos) + '\n')
+            resultado_i_esima_iteracion = [incubando, mild, grave, susceptibles, recuperados, muertos]
+
+            for k in range(6):
+                resultados_memoria[i][k] += resultado_i_esima_iteracion[k]
+
+            '''resultados.write(
+                str(incubando) + ',' + str(mild) + ',' + str(grave) + ',' + str(susceptibles) + ',' +
+                str(recuperados) + ',' + str(muertos))
+
+            if not ((i == cantidad_de_iteraciones - 1) and (j == repeticiones - 1)):
+                resultados.write('\n')'''
 
             iterar_modelo(modelo_actual)
 
@@ -155,5 +161,18 @@ def correr_modelo(modelo, nombre_del_modelo, cantidad_de_iteraciones, repeticion
 
         sys.stdout.write("\x1b[0m")
         mostrar_estado_final(modelo_actual)
+
+    for i in range(cantidad_de_iteraciones):
+        for j in range(6):
+            resultados_memoria[i][j] = round(resultados_memoria[i][j] / repeticiones, 2)
+
+    for i in range(len(resultados_memoria)):
+        resultados.write(
+            str(resultados_memoria[i][0]) + ',' + str(resultados_memoria[i][1]) + ',' + str(
+                resultados_memoria[i][2]) + ',' + str(resultados_memoria[i][3]) + ',' +
+            str(resultados_memoria[i][4]) + ',' + str(resultados_memoria[i][5]))
+
+        if i != (len(resultados_memoria) - 1):
+            resultados.write('\n')
 
     resultados.close()

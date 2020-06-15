@@ -7,6 +7,8 @@ from modelos import crear_modelo_SIRM, crear_modelo_SISM, crear_modelo_SIRMS, co
 def main():
     global grafo
 
+    nombre_archivo_salida = input("Ingrese el nombre del archivo en el que quiere los resultados \n")
+
     print("Cantidad de veces que corre: ")
 
     repeticiones = int(input("Numero: "))
@@ -71,13 +73,13 @@ def main():
 
         if input_modelo == '1':
             modelo = crear_modelo_SISM(un_grafo=grafo, probabilidad_de_estar_incubando=probabilidad_de_estar_incubando)
-            correr_modelo_SISM(modelo, cantidad_de_iteraciones, repeticiones)
+            correr_modelo_SISM(modelo, cantidad_de_iteraciones, repeticiones, nombre_archivo_salida)
         elif input_modelo == '2':
             modelo = crear_modelo_SIRM(un_grafo=grafo, probabilidad_de_estar_incubando=probabilidad_de_estar_incubando)
-            correr_modelo_SIRM(modelo, cantidad_de_iteraciones, repeticiones)
+            correr_modelo_SIRM(modelo, cantidad_de_iteraciones, repeticiones, nombre_archivo_salida)
         elif input_modelo == '3':
             modelo = crear_modelo_SIRMS(un_grafo=grafo, probabilidad_de_estar_incubando=probabilidad_de_estar_incubando)
-            correr_modelo_SIRMS(modelo, cantidad_de_iteraciones, repeticiones)
+            correr_modelo_SIRMS(modelo, cantidad_de_iteraciones, repeticiones, nombre_archivo_salida)
     except ValueError:
         raise Exception("Input numerico invalido")
 
