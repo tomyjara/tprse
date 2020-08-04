@@ -1,6 +1,7 @@
 import random
 
-from constantes import ESTADO_INFECTADO_GRAVE, ESTADO_INFECTADO_MILD, ESTADO_INCUBANDO, ESTADO_SUSCEPTIBLE
+from constantes import ESTADO_INFECTADO_GRAVE, ESTADO_INFECTADO_MILD, ESTADO_INCUBANDO, ESTADO_SUSCEPTIBLE, \
+    ESTADO_MUERTO
 from estados.estado_nodo import EstadoNodo
 from estados.sirm.estado_incubando_sirm import EstadoIncubandoSIRM
 
@@ -12,6 +13,9 @@ class EstadoSusceptibleSIRM(EstadoNodo):
 
     def calcular_probabilidad_de_contagio(self, grafo, nodo):
         vecinos = list(grafo.neighbors(nodo))
+
+        vecinos = [vecino for vecino in vecinos if type(grafo.nodes[vecino]['estado']).__name__ != ESTADO_MUERTO]
+
         if len(vecinos) == 0:
             return 0
         else:

@@ -12,6 +12,9 @@ class EstadoSusceptibleSIRMS(EstadoNodo):
 
     def calcular_probabilidad_de_contagio(self, grafo, nodo):
         vecinos = list(grafo.neighbors(nodo))
+
+        vecinos = [vecino for vecino in vecinos if type(grafo.nodes[vecino]['estado']).__name__ != ESTADO_MUERTO]
+
         if len(vecinos) == 0:
             return 0
         else:
