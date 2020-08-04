@@ -17,7 +17,7 @@ T_INCUBACION = 7
 T_INFECCION = 14
 
 # La probabilidad de ser de riesgo depende de cada población.
-
+# https://www.cia.gov/library/publications/the-world-factbook/fields/341.html + Enfermos
 PROBABILIDAD_RIESGO = 0.25
 
 # Fuente: https://www.statista.com/statistics/1105402/covid-hospitalization-rates-us-by-age-group/
