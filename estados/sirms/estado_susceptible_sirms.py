@@ -1,6 +1,7 @@
 import random
 
-from constantes import ESTADO_INFECTADO_GRAVE, ESTADO_INFECTADO_MILD, ESTADO_INCUBANDO, ESTADO_SUSCEPTIBLE
+from constantes import ESTADO_INFECTADO_GRAVE, ESTADO_INFECTADO_MILD, ESTADO_INCUBANDO, ESTADO_SUSCEPTIBLE, \
+    ESTADO_MUERTO
 from estados.estado_nodo import EstadoNodo
 from estados.sirms.estado_incubando_sirms import EstadoIncubandoSIRMS
 

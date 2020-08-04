@@ -71,13 +71,17 @@ def main():
 
     if input_modelo == 'SIS':
         modelo = crear_modelo_SISM(un_grafo=grafo, probabilidad_de_estar_incubando=probabilidad_de_estar_incubando)
-        correr_modelo_SISM(modelo, cantidad_de_iteraciones, repeticiones, nombre_archivo_salida)
+        correr_modelo_SISM(modelo, cantidad_de_iteraciones, repeticiones, nombre_archivo_salida, grado_salida,
+                           probabilidad_de_estar_incubando)
     elif input_modelo == 'SIR':
         modelo = crear_modelo_SIRM(un_grafo=grafo, probabilidad_de_estar_incubando=probabilidad_de_estar_incubando)
-        correr_modelo_SIRM(modelo, cantidad_de_iteraciones, repeticiones, nombre_archivo_salida)
+        correr_modelo_SIRM(modelo, cantidad_de_iteraciones, repeticiones, nombre_archivo_salida, grado_salida,
+                           probabilidad_de_estar_incubando)
     elif input_modelo == 'SIRS':
         modelo = crear_modelo_SIRMS(un_grafo=grafo, probabilidad_de_estar_incubando=probabilidad_de_estar_incubando)
-        correr_modelo_SIRMS(modelo, cantidad_de_iteraciones, repeticiones, nombre_archivo_salida)
+        correr_modelo_SIRMS(modelo, cantidad_de_iteraciones, repeticiones, nombre_archivo_salida, grado_salida,
+                            probabilidad_de_estar_incubando)
+
 
 def check_parametros(cant_param):
     if sys.argv.__len__() > cant_param:

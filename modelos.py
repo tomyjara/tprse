@@ -106,23 +106,32 @@ def crear_modelo_SISM(un_grafo,
     return un_grafo
 
 
-def correr_modelo_SIRM(modelo, cantidad_de_iteraciones, repeticiones, nombre_archivo_salida):
-    correr_modelo(modelo, 'SIRM', cantidad_de_iteraciones, repeticiones, nombre_archivo_salida)
+def correr_modelo_SIRM(modelo, cantidad_de_iteraciones, repeticiones, nombre_archivo_salida, grado_salida,
+                       probabilidad_de_estar_incubando):
+    correr_modelo(modelo, 'SIRM', cantidad_de_iteraciones, repeticiones, nombre_archivo_salida, grado_salida,
+                  probabilidad_de_estar_incubando)
 
 
-def correr_modelo_SISM(modelo, cantidad_de_iteraciones, repeticiones, nombre_archivo_salida):
-    correr_modelo(modelo, 'SISM', cantidad_de_iteraciones, repeticiones, nombre_archivo_salida)
+def correr_modelo_SISM(modelo, cantidad_de_iteraciones, repeticiones, nombre_archivo_salida, grado_salida,
+                       probabilidad_de_estar_incubando):
+    correr_modelo(modelo, 'SISM', cantidad_de_iteraciones, repeticiones, nombre_archivo_salida, grado_salida,
+                  probabilidad_de_estar_incubando)
 
 
-def correr_modelo_SIRMS(modelo, cantidad_de_iteraciones, repeticiones, nombre_archivo_salida):
-    correr_modelo(modelo, 'SIRMS', cantidad_de_iteraciones, repeticiones, nombre_archivo_salida)
+def correr_modelo_SIRMS(modelo, cantidad_de_iteraciones, repeticiones, nombre_archivo_salida, grado_salida,
+                        probabilidad_de_estar_incubando):
+    correr_modelo(modelo, 'SIRMS', cantidad_de_iteraciones, repeticiones, nombre_archivo_salida, grado_salida,
+                  probabilidad_de_estar_incubando)
 
 
-def correr_modelo(modelo, nombre_del_modelo, cantidad_de_iteraciones, repeticiones, nombre_archivo_salida):
-    resultados = open(nombre_archivo_salida, 'w')
+def correr_modelo(modelo, nombre_del_modelo, cantidad_de_iteraciones, repeticiones, nombre_archivo_salida, grado_salida,
+                  prob_estar_incubando):
+    resultados = open(nombre_archivo_salida, 'a+')
 
-    resultados.write('incubando' + ',' + 'i_mild' + ',' + 'i_grave' + ',' + 'susceptibles' + ',' + 'recuperados' +
-                     ',' + 'muertos' + '\n')
+    if os.stat(nombre_archivo_salida).st_size == 0:
+        resultados.write(
+            'modelo' + ',' + 'grado' + ',' + 'prob_incubando' + ',' + 'incubando' + ',' + 'i_mild' + ',' + 'i_grave' + ',' + 'susceptibles' + ',' + 'recuperados' +
+            ',' + 'muertos\n')
 
     print("\n", "Corriendo modelo " + nombre_del_modelo)
 
@@ -168,7 +177,7 @@ def correr_modelo(modelo, nombre_del_modelo, cantidad_de_iteraciones, repeticion
 
     for i in range(len(resultados_memoria)):
         resultados.write(
-            str(resultados_memoria[i][0]) + ',' + str(resultados_memoria[i][1]) + ',' + str(
+            nombre_del_modelo + ',' + str(grado_salida) + ',' + str(prob_estar_incubando) + ',' +  str(resultados_memoria[i][0]) + ',' + str(resultados_memoria[i][1]) + ',' + str(
                 resultados_memoria[i][2]) + ',' + str(resultados_memoria[i][3]) + ',' +
             str(resultados_memoria[i][4]) + ',' + str(resultados_memoria[i][5]))
 
