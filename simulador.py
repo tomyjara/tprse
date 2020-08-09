@@ -54,13 +54,13 @@ def main():
         elif num_grafo == '4':
             grado_de_nodo = int(input("Grado de salida de los nodos: "))
             cantidad_de_nodos = int(input("Cantidad de nodos: "))
-            seed = int(input("Seed: "))
-            grafo = nx.random_regular_graph(grado_de_nodo, cantidad_de_nodos, seed)
+            #seed = int(input("Seed: "))
+            grafo = nx.random_regular_graph(grado_de_nodo, cantidad_de_nodos)
             grafo.graph['tipo'] = "Random graph"
         elif num_grafo == '5':
-            d = int(input("Grado de salida de los nodos: "))
-            lamb = int(input("Distancia maxima entre nodos: "))
-            grafo = nx.balanced_tree(d, lamb)
+            d = int(input("Branching factor: "))
+            h = int(input("Altura del arbol: "))
+            grafo = nx.balanced_tree(d, h)
             grafo.graph['tipo'] = "Balanced Tree"
         else:
             raise Exception("Tipo de grafo invalido")

@@ -8,4 +8,4 @@ out
 .DS*
 *.pyc
 __pycache__ 
-resultados
+venv

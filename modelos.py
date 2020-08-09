@@ -75,6 +75,7 @@ def crear_modelo_SIRMS(un_grafo,
     un_grafo.graph['prob_de_deceso_riesgo'] = probabilidad_deceso_riesgo
     un_grafo.graph['prob_infec_grave_riesgo'] = probabilidad_infecc_grave_riesgo
     un_grafo.graph['prob_infec_grave'] = probabilidad_infecc_grave
+    un_grafo.graph['total_nodos_infectados'] = 0
 
     return un_grafo
 
@@ -122,11 +123,11 @@ def correr_modelo(modelo, nombre_del_modelo, cantidad_de_iteraciones, repeticion
     resultados = open(nombre_archivo_salida, 'w')
 
     resultados.write('incubando' + ',' + 'i_mild' + ',' + 'i_grave' + ',' + 'susceptibles' + ',' + 'recuperados' +
-                     ',' + 'muertos' + '\n')
+                     ',' + 'muertos' + ',' + 'infectados_totales' + '\n')
 
     print("\n", "Corriendo modelo " + nombre_del_modelo)
 
-    resultados_memoria = [[0, 0, 0, 0, 0, 0] for i in range(cantidad_de_iteraciones)]
+    resultados_memoria = [[0, 0, 0, 0, 0, 0, 0] for i in range(cantidad_de_iteraciones)]
 
     for j in range(repeticiones):
         modelo_actual = copy.deepcopy(modelo)
@@ -142,17 +143,15 @@ def correr_modelo(modelo, nombre_del_modelo, cantidad_de_iteraciones, repeticion
             recuperados = nodos_en_estado[ESTADO_RECUPERADO]
             muertos = nodos_en_estado[ESTADO_MUERTO]
 
-            resultado_i_esima_iteracion = [incubando, mild, grave, susceptibles, recuperados, muertos]
+            if i == 0:
+                modelo_actual.graph['total_nodos_infectados'] = incubando * len(modelo_actual) / 100
+                #modelo_actual.graph['total_nodos_infectados'] = len([x for x in modelo_actual.nodes if modelo_actual.nodes[x]['estado'].__class__.__name__== 'EstadoIncubando'])
 
-            for k in range(6):
+            resultado_i_esima_iteracion = [incubando, mild, grave, susceptibles, recuperados, muertos,
+                                           modelo_actual.graph['total_nodos_infectados']]
+
+            for k in range(7):
                 resultados_memoria[i][k] += resultado_i_esima_iteracion[k]
-
-            '''resultados.write(
-                str(incubando) + ',' + str(mild) + ',' + str(grave) + ',' + str(susceptibles) + ',' +
-                str(recuperados) + ',' + str(muertos))
-
-            if not ((i == cantidad_de_iteraciones - 1) and (j == repeticiones - 1)):
-                resultados.write('\n')'''
 
             iterar_modelo(modelo_actual)
 
@@ -163,14 +162,14 @@ def correr_modelo(modelo, nombre_del_modelo, cantidad_de_iteraciones, repeticion
         mostrar_estado_final(modelo_actual)
 
     for i in range(cantidad_de_iteraciones):
-        for j in range(6):
+        for j in range(7):
             resultados_memoria[i][j] = round(resultados_memoria[i][j] / repeticiones, 2)
 
     for i in range(len(resultados_memoria)):
         resultados.write(
             str(resultados_memoria[i][0]) + ',' + str(resultados_memoria[i][1]) + ',' + str(
                 resultados_memoria[i][2]) + ',' + str(resultados_memoria[i][3]) + ',' +
-            str(resultados_memoria[i][4]) + ',' + str(resultados_memoria[i][5]))
+            str(resultados_memoria[i][4]) + ',' + str(resultados_memoria[i][5]) + ',' + str(resultados_memoria[i][6]))
 
         if i != (len(resultados_memoria) - 1):
             resultados.write('\n')
