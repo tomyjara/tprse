@@ -13,7 +13,7 @@ def main():
 
     repeticiones = int(input("Numero: "))
 
-    print("Elegí el modelo:\n"
+    print("Elegi el modelo:\n"
           "[1] SIS\n"
           "[2] SIR\n"
           "[3] SIRS\n")

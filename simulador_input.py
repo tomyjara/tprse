@@ -27,7 +27,7 @@ def main():
             grafo.graph['tipo'] = "Grid " + str(cantidad_de_nodos_x) + "x" + str(cantidad_de_nodos_y)
 
         elif tipo_de_grafo == "small_world":
-            check_parametros(9)
+            check_parametros(10)
             cantidad_de_nodos = int(sys.argv[3])
             vecinos_mas_cerca = int(sys.argv[4])
             prob_de_rewiring_cada_eje = float(sys.argv[5])
@@ -66,13 +66,15 @@ def main():
         raise Exception("Input numerico invalido")
 
     repeticiones = int(sys.argv[next_arg])
+    next_arg += 1
+    nombre_archivo_salida = sys.argv[next_arg]
 
     if input_modelo == 'SIS':
         modelo = crear_modelo_SISM(un_grafo=grafo, probabilidad_de_estar_incubando=probabilidad_de_estar_incubando)
         correr_modelo_SISM(modelo, cantidad_de_iteraciones, repeticiones)
     elif input_modelo == 'SIR':
         modelo = crear_modelo_SIRM(un_grafo=grafo, probabilidad_de_estar_incubando=probabilidad_de_estar_incubando)
-        correr_modelo_SIRM(modelo, cantidad_de_iteraciones, repeticiones)
+        correr_modelo_SIRM(modelo, cantidad_de_iteraciones, repeticiones, nombre_archivo_salida)
     elif input_modelo == 'SIRS':
         modelo = crear_modelo_SIRMS(un_grafo=grafo, probabilidad_de_estar_incubando=probabilidad_de_estar_incubando)
         correr_modelo_SIRMS(modelo, cantidad_de_iteraciones, repeticiones)
