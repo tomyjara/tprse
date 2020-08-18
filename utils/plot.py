@@ -9,7 +9,7 @@ def tieneR(df):
 
 
 def graficar_modelo(df, pi, modelo, save_to):
-    pal = sns.color_palette("Set1")
+    pal = sns.color_palette("Set 1")
     alpha = 0.4
     recuperados = []
     labels = []
