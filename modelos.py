@@ -177,7 +177,7 @@ def correr_modelo(modelo, nombre_del_modelo, cantidad_de_iteraciones, repeticion
 
     for i in range(len(resultados_memoria)):
         resultados.write(
-            nombre_del_modelo + ',' + str(grado_salida) + ',' + str(prob_estar_incubando) + ',' +  str(resultados_memoria[i][0]) + ',' + str(resultados_memoria[i][1]) + ',' + str(
+            nombre_del_modelo + ',' + str(grado_salida) + ',' + str(prob_estar_incubando) + ',' + str(resultados_memoria[i][0]) + ',' + str(resultados_memoria[i][1]) + ',' + str(
                 resultados_memoria[i][2]) + ',' + str(resultados_memoria[i][3]) + ',' +
             str(resultados_memoria[i][4]) + ',' + str(resultados_memoria[i][5]))
 
