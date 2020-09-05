@@ -1,0 +1,24 @@
+Preguntas:
+
+Cómo evoluciona el porcentaje de infectados en cada modelo/configuración?
+Que diferencias se encuentran entre ellos?
+Cuando se llega al pico en cada caso?
+Se infectan todos los nodos?
+Cuando desaparece la infeccion?
+Como afecta lo anterior con respecto a las muertes?
+Relacionar resultados con casos reales como ocupacion de camas, cuarentena si/no etc
+Graficar R
+Con que porcentaje de la poblacion infectada se llega a la inmunidad de rebaño, o sea que los casos empiezan a bajar
+
+1 - 100%
+0.1 - 10%
+0.01 - 1%
+0.001 - 0.1%
+0.0001 - 0.01%
+
+Modelo Pico Nodos Infectados
+Grid-0.01 33 50000.0
+Grid-0.001 72 50000.0
+Grid-0.0005 131 50000.0
+Grid-0.0001 236 50000.0
+

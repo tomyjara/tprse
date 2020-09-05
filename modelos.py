@@ -8,6 +8,7 @@ from constantes import PROB_DE_DECESO, T_INCUBACION, PROBABILIDAD_RIESGO, \
     ESTADO_INCUBANDO, ESTADO_INFECTADO_MILD, ESTADO_SUSCEPTIBLE, ESTADO_INFECTADO_GRAVE, ESTADO_RECUPERADO, \
     ESTADO_MUERTO, T_RECUPERACION
 from estados.sirm.estado_incubando_sirm import EstadoIncubandoSIRM
+from estados.sirm.estado_recuperado import EstadoRecuperado
 from estados.sirms.estado_incubando_sirms import EstadoIncubandoSIRMS
 from estados.sirms.estado_susceptible_sirms import EstadoSusceptibleSIRMS
 from estados.sism.estado_incubando_sism import EstadoIncubandoSISM
@@ -128,6 +129,18 @@ def correr_modelo(modelo, nombre_del_modelo, cantidad_de_iteraciones, repeticion
     print("\n", "Corriendo modelo " + nombre_del_modelo)
 
     resultados_memoria = [[0, 0, 0, 0, 0, 0, 0] for i in range(cantidad_de_iteraciones)]
+
+    grados = []
+
+    for nodo in modelo.nodes:
+        grados.append((nodo, len(list(modelo.neighbors(nodo)))))
+
+    grados.sort(reverse=True, key=lambda tup: tup[1])
+
+    #vacuno 1%
+    for i in range(30):
+        nodo = grados[i][0]
+        modelo.nodes[grados[i][0]]['estado'] = EstadoRecuperado()
 
     for j in range(repeticiones):
         modelo_actual = copy.deepcopy(modelo)
